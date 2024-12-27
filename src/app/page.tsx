@@ -1,7 +1,8 @@
 import { H1, H2, P } from '@/components/typography';
 import { Button } from '@/components/ui/button';
+import { signIn, signOut } from '@/lib/auth';
 
-export default function Home() {
+export default async function Home() {
   return (
     <header className='z-10 p-2 relative overflow-hidden bg-primary-foreground text-center min-h-80 h-[30dvh] flex flex-col justify-center items-center border-dashed border-b'>
       <H1>My-GPT</H1>
@@ -11,12 +12,31 @@ export default function Home() {
         images.
       </P>
       <div className='mt-6 flex gap-2'>
-        <Button className='w-32'>Get Started</Button>
-        <Button className='w-32' variant='outline'>
-          Learn More
-        </Button>
+        <form
+          action={async () => {
+            'use server';
+            await signIn('google');
+          }}
+        >
+          <Button className='w-32' type='submit'>
+            {/* Get Started */}
+            Sign in
+          </Button>
+        </form>
+        <form
+          action={async () => {
+            'use server';
+            await signOut();
+          }}
+        >
+          <Button className='w-32' variant='outline'>
+            {/* Learn More */}
+            Sign out
+          </Button>
+        </form>
       </div>
 
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={'/logo-light.svg'}
         alt='logo'
