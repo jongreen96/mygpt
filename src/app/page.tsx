@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 
 export default function Home() {
   return (
-    <header className='bg-primary-foreground text-center min-h-80 h-[30dvh] flex flex-col justify-center items-center border-dashed border-b'>
+    <header className='z-10 p-2 relative overflow-hidden bg-primary-foreground text-center min-h-80 h-[30dvh] flex flex-col justify-center items-center border-dashed border-b'>
       <H1>My-GPT</H1>
       <H2>The AI Dashboard of Choice</H2>
       <P className='!mt-0 text-muted-foreground max-w-prose'>
@@ -16,6 +16,12 @@ export default function Home() {
           Learn More
         </Button>
       </div>
+
+      <img
+        src={'/logo-light.svg'}
+        alt='logo'
+        className='absolute opacity-20 min-w-[800px] animate-spin-slow -z-10'
+      />
     </header>
   );
 }
