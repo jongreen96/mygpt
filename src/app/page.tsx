@@ -1,6 +1,6 @@
 import { H1, H2, P } from '@/components/typography';
 import { Button } from '@/components/ui/button';
-import { signIn, signOut } from '@/lib/auth';
+import Link from 'next/link';
 
 export default async function Home() {
   return (
@@ -11,29 +11,14 @@ export default async function Home() {
         Used by #USERCOUNT# users, Generating #TOKENS# tokens and #IMAGECOUNT#
         images.
       </P>
-      <div className='mt-6 flex gap-2'>
-        <form
-          action={async () => {
-            'use server';
-            await signIn('google');
-          }}
-        >
-          <Button className='w-32' type='submit'>
-            {/* Get Started */}
-            Sign in
-          </Button>
-        </form>
-        <form
-          action={async () => {
-            'use server';
-            await signOut();
-          }}
-        >
-          <Button className='w-32' variant='outline'>
-            {/* Learn More */}
-            Sign out
-          </Button>
-        </form>
+      <div className='mt-6 grid grid-cols-2 gap-2'>
+        <Button asChild>
+          <Link href='/login'>Get Started</Link>
+        </Button>
+
+        <Button asChild variant='secondary'>
+          <Link href='#pricing'>Pricing</Link>
+        </Button>
       </div>
 
       {/* eslint-disable-next-line @next/next/no-img-element */}
