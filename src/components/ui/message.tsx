@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import type { Message } from 'ai';
-import { P } from '../typography';
+import Markdown from 'react-markdown';
 
 export default function Message({ message }: { message: Message }) {
   return (
@@ -11,11 +11,7 @@ export default function Message({ message }: { message: Message }) {
         message.role === 'user' ? '' : 'self-end bg-secondary',
       )}
     >
-      {message.toolInvocations ? (
-        <pre>{JSON.stringify(message.toolInvocations, null, 2)}</pre>
-      ) : (
-        <P>{message.content}</P>
-      )}
+      <Markdown>{message.content}</Markdown>
     </div>
   );
 }

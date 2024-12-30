@@ -4,12 +4,7 @@ import Message from '@/components/ui/message';
 import { useChat } from 'ai/react';
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    maxSteps: 5,
-    onFinish: (message, { usage }) => {
-      console.log(usage);
-    },
-  });
+  const { messages, input, handleInputChange, handleSubmit } = useChat();
   return (
     <div className='mx-auto flex w-full max-w-prose flex-col gap-4 p-2 py-24'>
       {messages.map((m, i) => (
