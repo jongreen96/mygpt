@@ -23,7 +23,7 @@ export default async function Home() {
 
         <Link
           href='#pricing'
-          className={buttonVariants({ variant: 'secondary' })}
+          className={buttonVariants({ variant: 'outline' })}
         >
           Pricing
         </Link>
