@@ -1,8 +1,13 @@
 import { H1, H2, P } from '@/components/typography';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
+import { auth } from '@/lib/auth';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 export default async function Home() {
+  const session = await auth();
+  if (session?.user) redirect('/dashboard');
+
   return (
     <header className='z-10 p-2 relative overflow-hidden bg-primary-foreground text-center min-h-80 h-[30dvh] flex flex-col justify-center items-center border-dashed border-b'>
       <H1>My-GPT</H1>
@@ -12,13 +17,16 @@ export default async function Home() {
         images.
       </P>
       <div className='mt-6 grid grid-cols-2 gap-2'>
-        <Button asChild>
-          <Link href='/login'>Get Started</Link>
-        </Button>
+        <Link href='/login' className={buttonVariants()}>
+          Get Started
+        </Link>
 
-        <Button asChild variant='secondary'>
-          <Link href='#pricing'>Pricing</Link>
-        </Button>
+        <Link
+          href='#pricing'
+          className={buttonVariants({ variant: 'secondary' })}
+        >
+          Pricing
+        </Link>
       </div>
 
       {/* eslint-disable-next-line @next/next/no-img-element */}
