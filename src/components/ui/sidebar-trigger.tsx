@@ -1,6 +1,6 @@
 'use client';
 
-import { Menu } from 'lucide-react';
+import { SidebarCloseIcon, SidebarOpenIcon } from 'lucide-react';
 import { Button } from './button';
 import { useSidebar } from './sidebar';
 
@@ -15,7 +15,7 @@ export function CustomExternalTrigger() {
       variant='outline'
       className='size-10 m-4 fixed'
     >
-      <Menu className='scale-125' />
+      <SidebarOpenIcon className='scale-125' />
     </Button>
   );
 }
@@ -30,7 +30,7 @@ export function CustomInternalTrigger() {
       variant='ghost'
       className='size-10'
     >
-      <Menu className='scale-125' />
+      <SidebarCloseIcon className='scale-125' />
     </Button>
   );
 }
