@@ -7,11 +7,11 @@ import {
 } from '@/components/ui/sidebar';
 import getSession from '@/lib/hooks/get-session';
 import { SquarePen } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import { Button } from './button';
 import { Separator } from './separator';
 import { CustomInternalTrigger } from './sidebar-trigger';
 import { ThemeToggle } from './theme-selector';
+import UserAvatar from './user-avatar';
 
 export async function AppSidebar() {
   const session = await getSession();
@@ -33,12 +33,7 @@ export async function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <div className='flex justify-between items-center'>
-          <Avatar>
-            <AvatarImage src={session.user?.image ?? undefined} />
-            <AvatarFallback>
-              {session.user?.name?.charAt(0) ?? 'AI'}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar session={session} />
 
           <ThemeToggle />
         </div>
