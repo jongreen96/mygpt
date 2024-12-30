@@ -16,7 +16,7 @@ export default async function ChatLayout({
       <AppSidebar />
       <main className='w-full'>
         <CustomExternalTrigger />
-        <section className='p-2'>{children}</section>
+        <section>{children}</section>
       </main>
     </SidebarProvider>
   );
