@@ -12,7 +12,7 @@ import { redirect } from 'next/navigation';
 
 export default async function LoginPage() {
   const session = await auth();
-  if (session?.user) redirect('/dashboard');
+  if (session?.user) redirect('/chat');
 
   return (
     <main className='w-full h-dvh flex items-center justify-center'>

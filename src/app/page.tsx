@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 
 export default async function Home() {
   const session = await auth();
-  if (session?.user) redirect('/dashboard');
+  if (session?.user) redirect('/chat');
 
   return (
     <header className='z-10 p-2 relative overflow-hidden bg-primary-foreground text-center min-h-80 h-[30dvh] flex flex-col justify-center items-center border-dashed border-b'>

@@ -1,15 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { signOut } from '@/lib/auth';
-import { getSession } from '@/lib/hooks';
-import { redirect } from 'next/navigation';
 
-export default async function DashboardPage() {
-  const session = await getSession();
-  if (!session?.user) redirect('/login');
-
+export default async function ChatPage() {
   return (
-    <div>
-      dashboard
+    <div className='w-full flex items-center justify-center h-dvh'>
       <form
         action={async () => {
           'use server';
