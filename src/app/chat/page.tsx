@@ -1,5 +1,6 @@
 'use client';
 
+import Message from '@/components/ui/message';
 import { useChat } from 'ai/react';
 
 export default function Chat() {
@@ -10,16 +11,9 @@ export default function Chat() {
     },
   });
   return (
-    <div className='mx-auto flex w-full max-w-prose flex-col border py-24'>
-      {messages.map((m) => (
-        <div key={m.id} className='whitespace-pre-wrap'>
-          {m.role === 'user' ? 'User: ' : 'AI: '}
-          {m.toolInvocations ? (
-            <pre>{JSON.stringify(m.toolInvocations, null, 2)}</pre>
-          ) : (
-            <p>{m.content}</p>
-          )}
-        </div>
+    <div className='mx-auto flex w-full max-w-prose flex-col gap-4 p-2 py-24'>
+      {messages.map((m, i) => (
+        <Message message={m} key={i} />
       ))}
 
       <form onSubmit={handleSubmit}>
