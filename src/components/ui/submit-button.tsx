@@ -10,7 +10,7 @@ export function SubmitButton({ children }: { children: ReactNode }) {
   return (
     <Button type='submit' disabled={pending} className='w-full'>
       {pending ? (
-        <p className='flex gap-2 items-center'>
+        <p className='flex items-center gap-2'>
           <Loader2 className='size-4 animate-spin' />
           Please Wait
         </p>

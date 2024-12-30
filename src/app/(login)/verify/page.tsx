@@ -12,10 +12,10 @@ import Link from 'next/link';
 
 export default async function VerifyPage() {
   return (
-    <main className='w-full h-dvh flex items-center justify-center'>
+    <main className='flex h-dvh w-full items-center justify-center'>
       <Card>
         <CardHeader className='text-center'>
-          <div className='size-16 flex items-center justify-center rounded-full bg-secondary mx-auto'>
+          <div className='mx-auto flex size-16 items-center justify-center rounded-full bg-secondary'>
             <Mail className='size-10' />
           </div>
           <CardTitle>
@@ -26,7 +26,7 @@ export default async function VerifyPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className='space-y-4'>
-          <div className='rounded border border-dashed flex items-center gap-2 justify-center p-2'>
+          <div className='flex items-center justify-center gap-2 rounded border border-dashed p-2'>
             <AlertCircle className='size-4' />
             <p className='text-sm'>Check your spam folder </p>
           </div>
@@ -38,7 +38,7 @@ export default async function VerifyPage() {
               variant: 'ghost',
             })}
           >
-            <ChevronLeft className='size-2 -ml-3' />
+            <ChevronLeft className='-ml-3 size-2' />
             Return to Homepage
           </Link>
         </CardContent>

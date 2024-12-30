@@ -9,10 +9,10 @@ export default async function Home() {
   if (session?.user) redirect('/chat');
 
   return (
-    <header className='z-10 p-2 relative overflow-hidden bg-primary-foreground text-center min-h-80 h-[30dvh] flex flex-col justify-center items-center border-dashed border-b'>
+    <header className='relative z-10 flex h-[30dvh] min-h-80 flex-col items-center justify-center overflow-hidden border-b border-dashed bg-primary-foreground p-2 text-center'>
       <H1>My-GPT</H1>
       <H2>The AI Dashboard of Choice</H2>
-      <P className='!mt-0 text-muted-foreground max-w-prose'>
+      <P className='!mt-0 max-w-prose text-muted-foreground'>
         Used by #USERCOUNT# users, Generating #TOKENS# tokens and #IMAGECOUNT#
         images.
       </P>
@@ -33,7 +33,7 @@ export default async function Home() {
       <img
         src={'/logo-light.svg'}
         alt='logo'
-        className='absolute opacity-20 min-w-[800px] animate-spin-slow -z-10'
+        className='absolute -z-10 min-w-[800px] animate-spin-slow opacity-20'
       />
     </header>
   );

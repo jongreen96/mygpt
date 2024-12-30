@@ -13,7 +13,7 @@ export function CustomExternalTrigger() {
       onClick={toggleSidebar}
       size='icon'
       variant='outline'
-      className='size-10 m-4 fixed'
+      className='fixed m-4 size-10'
     >
       <SidebarOpenIcon className='scale-125' />
     </Button>

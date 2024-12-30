@@ -15,7 +15,7 @@ export default async function LoginPage() {
   if (session?.user) redirect('/chat');
 
   return (
-    <main className='w-full h-dvh flex items-center justify-center'>
+    <main className='flex h-dvh w-full items-center justify-center'>
       <Card>
         <CardHeader className='text-center'>
           <CardTitle>
@@ -33,7 +33,7 @@ export default async function LoginPage() {
             <SubmitButton>Sign In with Google</SubmitButton>
           </form>
 
-          <div className='grid grid-cols-[2fr_1fr_2fr] text-center text-sm items-center'>
+          <div className='grid grid-cols-[2fr_1fr_2fr] items-center text-center text-sm'>
             <Separator />
             or
             <Separator />
@@ -67,7 +67,7 @@ export default async function LoginPage() {
               variant: 'ghost',
             })}
           >
-            <ChevronLeft className='size-2 -ml-3' />
+            <ChevronLeft className='-ml-3 size-2' />
             Return to Homepage
           </Link>
         </CardContent>

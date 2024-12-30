@@ -22,7 +22,7 @@ export default function UserAvatar({ session }: { session: DefaultSession }) {
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='ml-4 mb-1'>
+      <DropdownMenuContent className='mb-1 ml-4'>
         <DropdownMenuItem onClick={() => signOut({ redirectTo: '/' })}>
           <LogOutIcon />
           Log Out

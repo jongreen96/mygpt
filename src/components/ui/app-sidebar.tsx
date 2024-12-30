@@ -19,7 +19,7 @@ export async function AppSidebar() {
   return (
     <Sidebar variant='floating'>
       <SidebarHeader>
-        <div className='flex justify-between items-center'>
+        <div className='flex items-center justify-between'>
           <CustomInternalTrigger />
           <Button variant='ghost' size='icon'>
             <SquarePen className='scale-125' />
@@ -32,7 +32,7 @@ export async function AppSidebar() {
         <SidebarGroup />
       </SidebarContent>
       <SidebarFooter>
-        <div className='flex justify-between items-center'>
+        <div className='flex items-center justify-between'>
           <UserAvatar session={session} />
 
           <ThemeToggle />
