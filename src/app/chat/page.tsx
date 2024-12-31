@@ -6,12 +6,30 @@ import { useChat } from 'ai/react';
 import { Send, Square } from 'lucide-react';
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
-    useChat();
+  const {
+    messages,
+    setMessages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading,
+    stop,
+    reload,
+  } = useChat();
+
+  const handleDelete = (id: string) => {
+    setMessages(messages.filter((message) => message.id !== id));
+  };
+
   return (
     <div className='mx-auto flex w-full max-w-prose flex-col gap-4 p-2 py-24'>
       {messages.map((m, i) => (
-        <Message message={m} key={i} />
+        <Message
+          key={i}
+          message={m}
+          reload={reload}
+          handleDelete={handleDelete}
+        />
       ))}
 
       <form
