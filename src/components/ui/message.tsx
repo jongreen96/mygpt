@@ -8,7 +8,7 @@ export default function Message({ message }: { message: Message }) {
       key={message.id}
       className={cn(
         'w-fit max-w-[95%] whitespace-pre-wrap rounded border p-2',
-        message.role === 'user' ? '' : 'self-end bg-secondary',
+        message.role === 'user' ? 'self-end' : 'bg-secondary',
       )}
     >
       <Markdown>{message.content}</Markdown>
