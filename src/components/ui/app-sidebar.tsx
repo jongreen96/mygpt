@@ -3,10 +3,15 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { getConversations } from '@/lib/db';
 import getSession from '@/lib/hooks/get-session';
-import { SquarePen } from 'lucide-react';
+import { MessageSquare, SquarePen } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from './button';
 import { Separator } from './separator';
@@ -16,6 +21,11 @@ import UserAvatar from './user-avatar';
 
 export async function AppSidebar() {
   const session = await getSession();
+  const conversations = session?.user?.id
+    ? await getConversations(session.user.id)
+    : [];
+
+  console.log(conversations);
 
   return (
     <Sidebar variant='floating'>
@@ -30,9 +40,23 @@ export async function AppSidebar() {
         </div>
         <Separator />
       </SidebarHeader>
+
       <SidebarContent>
-        <SidebarGroup />
-        <SidebarGroup />
+        <SidebarGroup>
+          <SidebarGroupLabel>Conversations</SidebarGroupLabel>
+          <SidebarGroupContent>
+            {conversations.map((conversation) => (
+              <SidebarMenuItem key={conversation.id}>
+                <SidebarMenuButton asChild>
+                  <a href={`/chat/${conversation.id}`}>
+                    <MessageSquare />
+                    <span>{conversation.subject}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
         <div className='flex items-center justify-between'>

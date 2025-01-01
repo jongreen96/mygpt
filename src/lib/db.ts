@@ -41,6 +41,20 @@ export async function getConversation(conversationId: string) {
   return conversation;
 }
 
+export async function getConversations(userId: string) {
+  const conversations = await prisma.conversation.findMany({
+    where: {
+      userId,
+    },
+    select: {
+      id: true,
+      subject: true,
+    },
+  });
+
+  return conversations;
+}
+
 export async function saveMessages({
   userId,
   conversationId,
