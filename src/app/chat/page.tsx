@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import Message from '@/components/ui/message';
 import { useChat } from 'ai/react';
-import { Send, Square } from 'lucide-react';
+import { AlertCircle, Send, Square } from 'lucide-react';
 
 export default function Chat() {
   const {
@@ -15,6 +15,7 @@ export default function Chat() {
     isLoading,
     stop,
     reload,
+    error,
   } = useChat();
 
   const handleDelete = (id: string) => {
@@ -31,6 +32,8 @@ export default function Chat() {
           handleDelete={handleDelete}
         />
       ))}
+
+      <ErrorMessage error={error} reload={reload} />
 
       <form
         onSubmit={handleSubmit}
@@ -70,5 +73,27 @@ function SubmitButton({
         <Square className='scale-125' />
       )}
     </Button>
+  );
+}
+
+function ErrorMessage({
+  error,
+  reload,
+}: {
+  error: Error | undefined;
+  reload: () => void;
+}) {
+  if (!error) return null;
+  return (
+    <div className='flex gap-2 rounded bg-destructive/20 p-2'>
+      <AlertCircle className='shrink-0 text-destructive' />
+      <p>
+        An error has occoured,{' '}
+        <span className='cursor-pointer underline' onClick={reload}>
+          Reload
+        </span>{' '}
+        resonse or type a new message.
+      </p>
+    </div>
   );
 }
