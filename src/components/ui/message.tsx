@@ -25,7 +25,7 @@ export default function Message({
 
       <div
         className={cn(
-          'absolute hidden gap-1 rounded-lg border bg-secondary p-1 group-hover:flex',
+          'absolute hidden gap-1 rounded-lg border border-white bg-secondary p-1 group-hover:flex dark:border-black',
           message.role === 'user' ? 'right-2' : 'left-2',
         )}
       >
