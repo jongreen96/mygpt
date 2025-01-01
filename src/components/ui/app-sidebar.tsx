@@ -7,7 +7,6 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenuButton,
-  SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { getConversations } from '@/lib/db';
 import getSession from '@/lib/hooks/get-session';
@@ -24,8 +23,6 @@ export async function AppSidebar() {
   const conversations = session?.user?.id
     ? await getConversations(session.user.id)
     : [];
-
-  console.log(conversations);
 
   return (
     <Sidebar variant='floating'>
@@ -46,14 +43,12 @@ export async function AppSidebar() {
           <SidebarGroupLabel>Conversations</SidebarGroupLabel>
           <SidebarGroupContent>
             {conversations.map((conversation) => (
-              <SidebarMenuItem key={conversation.id}>
-                <SidebarMenuButton asChild>
-                  <a href={`/chat/${conversation.id}`}>
-                    <MessageSquare />
-                    <span>{conversation.subject}</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <SidebarMenuButton asChild key={conversation.id}>
+                <Link href={`/chat/${conversation.id}`}>
+                  <MessageSquare />
+                  <span>{conversation.subject}</span>
+                </Link>
+              </SidebarMenuButton>
             ))}
           </SidebarGroupContent>
         </SidebarGroup>
