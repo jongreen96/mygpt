@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/sidebar';
 import getSession from '@/lib/hooks/get-session';
 import { SquarePen } from 'lucide-react';
+import Link from 'next/link';
 import { Button } from './button';
 import { Separator } from './separator';
 import { CustomInternalTrigger } from './sidebar-trigger';
@@ -21,8 +22,10 @@ export async function AppSidebar() {
       <SidebarHeader>
         <div className='flex items-center justify-between'>
           <CustomInternalTrigger />
-          <Button variant='ghost' size='icon'>
-            <SquarePen className='scale-125' />
+          <Button asChild variant='ghost' size='icon'>
+            <Link href='/chat'>
+              <SquarePen className='scale-125' />
+            </Link>
           </Button>
         </div>
         <Separator />

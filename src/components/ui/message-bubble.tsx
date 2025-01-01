@@ -4,7 +4,7 @@ import { RefreshCcw, Trash2 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { Button } from './button';
 
-export default function Message({
+export default function MessageBubble({
   message,
   reload,
   handleDelete,

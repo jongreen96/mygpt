@@ -1,21 +1,27 @@
+import { auth } from '@/lib/auth';
+import { saveMessages } from '@/lib/db';
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 
 export const maxDuration = 600;
 
-export async function POST(req: Request) {
-  const { messages } = await req.json();
+export const POST = auth(async function POST(req: Request) {
+  const { messages, conversationId } = await req.json();
 
   const result = streamText({
     model: openai('gpt-4o-mini'),
     messages,
-    onFinish({ text, finishReason, usage }) {
-      console.log('text: ', text);
-      console.log('finishReason: ', finishReason);
-      console.log('usage: ', usage);
-      console.log(messages.pop());
+    onFinish({ text, usage }) {
+      saveMessages({
+        // @ts-expect-error - Auth not on Request type
+        userId: req.auth.userId,
+        conversationId,
+        userMessage: messages.pop().content,
+        assistantMessage: text,
+        usage,
+      });
     },
   });
 
   return result.toDataStreamResponse();
-}
+});
