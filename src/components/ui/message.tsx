@@ -38,14 +38,16 @@ export default function Message({
           <Trash2 />
         </Button>
 
-        <Button
-          size='icon'
-          variant='ghost'
-          className='aspect-square size-5'
-          onClick={reload}
-        >
-          <RefreshCcw />
-        </Button>
+        {message.role === 'assistant' && (
+          <Button
+            size='icon'
+            variant='ghost'
+            className='aspect-square size-5'
+            onClick={reload}
+          >
+            <RefreshCcw />
+          </Button>
+        )}
       </div>
     </div>
   );
