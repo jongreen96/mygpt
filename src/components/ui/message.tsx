@@ -8,10 +8,12 @@ export default function Message({
   message,
   reload,
   handleDelete,
+  last,
 }: {
   message: Message;
   reload: () => void;
   handleDelete: (id: string) => void;
+  last: boolean;
 }) {
   return (
     <div
@@ -38,17 +40,22 @@ export default function Message({
           <Trash2 />
         </Button>
 
-        {message.role === 'assistant' && (
-          <Button
-            size='icon'
-            variant='ghost'
-            className='aspect-square size-5'
-            onClick={reload}
-          >
-            <RefreshCcw />
-          </Button>
-        )}
+        <ReloadButton reload={reload} last={last} />
       </div>
     </div>
+  );
+}
+
+function ReloadButton({ reload, last }: { reload: () => void; last: boolean }) {
+  if (!last) return null;
+  return (
+    <Button
+      size='icon'
+      variant='ghost'
+      className='aspect-square size-5'
+      onClick={reload}
+    >
+      <RefreshCcw />
+    </Button>
   );
 }

@@ -30,6 +30,7 @@ export default function Chat() {
           message={m}
           reload={reload}
           handleDelete={handleDelete}
+          last={messages.length - 1 === i}
         />
       ))}
 
