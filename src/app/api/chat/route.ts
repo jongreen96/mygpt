@@ -9,6 +9,12 @@ export async function POST(req: Request) {
   const result = streamText({
     model: openai('gpt-4o-mini'),
     messages,
+    onFinish({ text, finishReason, usage }) {
+      console.log('text: ', text);
+      console.log('finishReason: ', finishReason);
+      console.log('usage: ', usage);
+      console.log(messages.pop());
+    },
   });
 
   return result.toDataStreamResponse();
