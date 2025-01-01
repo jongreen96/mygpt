@@ -5,6 +5,7 @@ async function fetchMessagesWithRetry(
   conversationId: string,
   retries: number = 3,
   delay: number = 100,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any[]> {
   for (let i = 0; i < retries; i++) {
     const messages = await getMessages(conversationId);
