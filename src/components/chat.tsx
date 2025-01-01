@@ -34,6 +34,7 @@ export default function Chat({
     },
     onFinish() {
       router.push(`/chat/${conversationId}`);
+      router.refresh();
     },
   });
 
