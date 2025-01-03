@@ -55,7 +55,10 @@ export async function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <div className='flex items-center justify-between'>
-          <UserAvatar session={session} />
+          <UserAvatar
+            userName={session.user?.name}
+            userImage={session.user?.image}
+          />
 
           <ThemeToggle />
         </div>
