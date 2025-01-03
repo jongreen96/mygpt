@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import MessageBubble from '@/components/ui/message-bubble';
 import { deleteMessageAction } from '@/lib/actions';
+import { useEffect, useRef } from 'react';
 
 import { Message, useChat } from 'ai/react';
 import { AlertCircle, Send, Square } from 'lucide-react';
@@ -16,6 +17,7 @@ export default function Chat({
   prevMessages?: Message[];
 }) {
   const router = useRouter();
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   const {
     messages,
@@ -42,6 +44,11 @@ export default function Chat({
     },
   });
 
+  // Scroll to bottom on initial page load
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView();
+  }, []);
+
   const handleDelete = (id: string) => {
     setMessages(messages.filter((message) => message.id !== id));
     deleteMessageAction(Number(id));
@@ -58,6 +65,8 @@ export default function Chat({
           last={messages.length - 1 === i}
         />
       ))}
+
+      <div ref={bottomRef} />
 
       <ErrorMessage error={error} reload={reload} />
 
