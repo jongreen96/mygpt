@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import generateSubject from './hooks/generate-subject';
 
 const prismaClientSingleton = () => {
   return new PrismaClient();
@@ -15,20 +16,26 @@ export default prisma;
 if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma;
 
 // -------------------- Queries -------------------- \\
-export async function createConversation(
-  userId: string,
-  conversationId: string,
-) {
-  await prisma.conversation.create({
+export async function createConversation({
+  userId,
+  messages,
+}: {
+  userId: string;
+  messages: { role: string; content: string }[];
+}) {
+  const subject = await generateSubject(messages);
+
+  const newConversation = await prisma.conversation.create({
     data: {
-      id: conversationId,
       userId,
-      subject: 'Test',
+      subject: subject,
     },
     select: {
       id: true,
     },
   });
+
+  return newConversation.id;
 }
 
 export async function getConversation(conversationId: string) {
@@ -56,13 +63,11 @@ export async function getConversations(userId: string) {
 }
 
 export async function saveMessages({
-  userId,
   conversationId,
   userMessage,
   assistantMessage,
   usage,
 }: {
-  userId: string;
   conversationId: string;
   userMessage: string;
   assistantMessage: string;
@@ -72,11 +77,6 @@ export async function saveMessages({
     totalTokens: number;
   };
 }) {
-  const conversation = await getConversation(conversationId);
-  if (!conversation) {
-    await createConversation(userId, conversationId);
-  }
-
   console.log(usage); // TODO: Record usage
 
   await prisma.message.createMany({

@@ -79,7 +79,7 @@ model Authenticator {
 }
 
 model Conversation {
-  id      String @id @unique
+  id      String @id @default(nanoid(10))
   userId  String
   subject String
   user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)

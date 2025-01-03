@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import MessageBubble from '@/components/ui/message-bubble';
 import { Message, useChat } from 'ai/react';
 import { AlertCircle, Send, Square } from 'lucide-react';
-import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
 
 export default function Chat({
@@ -15,7 +14,6 @@ export default function Chat({
   prevMessages?: Message[];
 }) {
   const router = useRouter();
-  conversationId = conversationId ?? nanoid(10);
 
   const {
     messages,
@@ -32,8 +30,9 @@ export default function Chat({
     body: {
       conversationId,
     },
-    onFinish() {
-      router.push(`/chat/${conversationId}`);
+    onFinish(e) {
+      // @ts-expect-error - conversationId is not on Message type
+      router.push(`/chat/${e.annotations[0].conversationId}`);
       router.refresh();
     },
   });
