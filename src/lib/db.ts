@@ -48,6 +48,14 @@ export async function getConversation(conversationId: string) {
   return conversation;
 }
 
+export async function deleteConversation(conversationId: string) {
+  await prisma.conversation.delete({
+    where: {
+      id: conversationId,
+    },
+  });
+}
+
 export async function getConversations(userId: string) {
   const conversations = await prisma.conversation.findMany({
     where: {

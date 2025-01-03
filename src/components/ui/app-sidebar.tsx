@@ -6,13 +6,23 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
+  SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { getConversations } from '@/lib/db';
+import { deleteConversation, getConversations } from '@/lib/db';
 import getSession from '@/lib/hooks/get-session';
-import { MessageSquare, SquarePen } from 'lucide-react';
+import { MessageSquare, MoreHorizontalIcon, SquarePen } from 'lucide-react';
+import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 import { Button } from './button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './dropdown-menu';
 import { Separator } from './separator';
 import { CustomInternalTrigger } from './sidebar-trigger';
 import { ThemeToggle } from './theme-selector';
@@ -42,14 +52,42 @@ export async function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Conversations</SidebarGroupLabel>
           <SidebarGroupContent>
-            {conversations.map((conversation) => (
-              <SidebarMenuButton asChild key={conversation.id}>
-                <Link href={`/chat/${conversation.id}`}>
-                  <MessageSquare />
-                  <span>{conversation.subject}</span>
-                </Link>
-              </SidebarMenuButton>
-            ))}
+            <SidebarMenu>
+              {conversations.map((conversation) => (
+                <SidebarMenuItem key={conversation.id}>
+                  <SidebarMenuButton asChild>
+                    <Link href={`/chat/${conversation.id}`}>
+                      <MessageSquare />
+                      <span>{conversation.subject}</span>
+                    </Link>
+                  </SidebarMenuButton>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <SidebarMenuAction>
+                        <MoreHorizontalIcon />
+                      </SidebarMenuAction>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent>
+                      <form
+                        action={async () => {
+                          'use server';
+                          await deleteConversation(conversation.id);
+                          revalidatePath('/chat');
+                        }}
+                      >
+                        <button type='submit' className='w-full'>
+                          <DropdownMenuItem className='bg-destructive/50'>
+                            Delete
+                          </DropdownMenuItem>
+                        </button>
+                      </form>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

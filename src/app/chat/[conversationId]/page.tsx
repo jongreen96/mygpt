@@ -1,5 +1,6 @@
 import Chat from '@/components/chat';
 import { getMessages } from '@/lib/db';
+import { redirect } from 'next/navigation';
 
 async function fetchMessagesWithRetry(
   conversationId: string,
@@ -25,6 +26,7 @@ export default async function ConversationPage({
 }) {
   const conversationId = (await params).conversationId;
   const messages = await fetchMessagesWithRetry(conversationId);
+  if (messages.length < 1) redirect('/chat');
 
   return <Chat conversationId={conversationId} prevMessages={messages} />;
 }
