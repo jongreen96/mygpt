@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils';
 import type { Message } from 'ai';
 import { RefreshCcw, Trash2 } from 'lucide-react';
 import Markdown from 'react-markdown';
+import { Code, Pre } from '../typography';
 import { Button } from './button';
 
 export default function MessageBubble({
@@ -23,7 +24,14 @@ export default function MessageBubble({
         message.role === 'user' ? 'self-end' : 'bg-secondary',
       )}
     >
-      <Markdown>{message.content}</Markdown>
+      <Markdown
+        components={{
+          code: (props) => <Code {...props} />,
+          pre: (props) => <Pre {...props} />,
+        }}
+      >
+        {message.content}
+      </Markdown>
 
       <div
         className={cn(

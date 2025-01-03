@@ -2,6 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import MessageBubble from '@/components/ui/message-bubble';
+import { deleteMessageAction } from '@/lib/actions';
+
 import { Message, useChat } from 'ai/react';
 import { AlertCircle, Send, Square } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -39,6 +41,7 @@ export default function Chat({
 
   const handleDelete = (id: string) => {
     setMessages(messages.filter((message) => message.id !== id));
+    deleteMessageAction(Number(id));
   };
 
   return (

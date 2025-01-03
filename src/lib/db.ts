@@ -128,3 +128,11 @@ export async function getMessages(conversationId: string) {
 
   return formattedMessages;
 }
+
+export async function deleteMessage(messageId: number) {
+  await prisma.message.delete({
+    where: {
+      id: messageId,
+    },
+  });
+}
