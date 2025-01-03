@@ -34,8 +34,11 @@ export default function Chat({
     },
     onFinish(e) {
       // @ts-expect-error - conversationId is not on Message type
-      router.push(`/chat/${e.annotations[0].conversationId}`);
-      router.refresh();
+      const newConversationId = e.annotations[0].conversationId;
+      if (conversationId !== newConversationId) {
+        router.push(`/chat/${newConversationId}`);
+        router.refresh();
+      }
     },
   });
 
