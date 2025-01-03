@@ -5,14 +5,15 @@ import { createDataStreamResponse, streamText } from 'ai';
 
 export const maxDuration = 600;
 
-export const POST = auth(async function POST(req: Request) {
+export async function POST(req: Request) {
   // eslint-disable-next-line prefer-const
   let { messages, conversationId } = await req.json();
+  const session = await auth();
+  if (typeof session?.user?.id === 'undefined') return;
 
   if (!conversationId)
     conversationId = await createConversation({
-      // @ts-expect-error - Auth not on Request type
-      userId: req.auth.userId,
+      userId: session?.user?.id,
       messages,
     });
 
@@ -40,4 +41,4 @@ export const POST = auth(async function POST(req: Request) {
       return error instanceof Error ? error.message : String(error);
     },
   });
-});
+}
