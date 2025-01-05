@@ -51,7 +51,13 @@ export default function Chat({
 
   const handleDelete = (id: string) => {
     setMessages(messages.filter((message) => message.id !== id));
-    deleteMessageAction(Number(id));
+    deleteMessageAction(id);
+  };
+
+  const handleReload = () => {
+    reload();
+    deleteMessageAction(messages[messages.length - 1].id);
+    deleteMessageAction(messages[messages.length - 2].id);
   };
 
   return (
@@ -60,7 +66,7 @@ export default function Chat({
         <MessageBubble
           key={i}
           message={m}
-          reload={reload}
+          handleReload={handleReload}
           handleDelete={handleDelete}
           last={messages.length - 1 === i}
         />
@@ -68,11 +74,11 @@ export default function Chat({
 
       <div ref={bottomRef} />
 
-      <ErrorMessage error={error} reload={reload} />
+      <ErrorMessage error={error} handleReload={handleReload} />
 
       <form
         onSubmit={handleSubmit}
-        className='fixed bottom-0 mb-8 flex w-full max-w-[calc(65ch-16px)] items-center gap-2'
+        className='fixed bottom-0 mb-8 flex w-[calc(100%-16px)] max-w-[calc(65ch-16px)] items-center gap-2'
       >
         <input
           className='grow rounded border border-gray-300 p-2 shadow-xl'
@@ -113,10 +119,10 @@ function SubmitButton({
 
 function ErrorMessage({
   error,
-  reload,
+  handleReload,
 }: {
   error: Error | undefined;
-  reload: () => void;
+  handleReload: () => void;
 }) {
   if (!error) return null;
   return (
@@ -124,7 +130,7 @@ function ErrorMessage({
       <AlertCircle className='shrink-0 text-destructive' />
       <p>
         An error has occoured,{' '}
-        <span className='cursor-pointer underline' onClick={reload}>
+        <span className='cursor-pointer underline' onClick={handleReload}>
           Reload
         </span>{' '}
         resonse or type a new message.

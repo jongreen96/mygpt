@@ -7,12 +7,12 @@ import { Button } from './button';
 
 export default function MessageBubble({
   message,
-  reload,
+  handleReload,
   handleDelete,
   last,
 }: {
   message: Message;
-  reload: () => void;
+  handleReload: () => void;
   handleDelete: (id: string) => void;
   last: boolean;
 }) {
@@ -48,20 +48,26 @@ export default function MessageBubble({
           <Trash2 />
         </Button>
 
-        <ReloadButton reload={reload} last={last} />
+        <ReloadButton handleReload={handleReload} last={last} />
       </div>
     </div>
   );
 }
 
-function ReloadButton({ reload, last }: { reload: () => void; last: boolean }) {
+function ReloadButton({
+  handleReload,
+  last,
+}: {
+  handleReload: () => void;
+  last: boolean;
+}) {
   if (!last) return null;
   return (
     <Button
       size='icon'
       variant='ghost'
       className='aspect-square size-5'
-      onClick={reload}
+      onClick={handleReload}
     >
       <RefreshCcw />
     </Button>

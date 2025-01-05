@@ -1,4 +1,4 @@
-import Chat from '@/components/chat';
+import Chat from '@/components/chat/chat';
 import { getMessages } from '@/lib/db';
 import { redirect } from 'next/navigation';
 
