@@ -22,6 +22,8 @@ export async function POST(req: Request) {
       const result = streamText({
         model: openai('gpt-4o-mini'),
         messages,
+        // Beware: Abort signals don't triggert onFinish
+        abortSignal: req.signal,
         onFinish({ text, usage }) {
           dataStream.writeMessageAnnotation({
             conversationId,

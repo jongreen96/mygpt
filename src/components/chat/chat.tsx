@@ -60,6 +60,12 @@ export default function Chat({
     deleteMessageAction(messages[messages.length - 2].id);
   };
 
+  const handleStop = () => {
+    stop();
+    // remove the last 2 messages from messages
+    setMessages(messages.slice(0, -2));
+  };
+
   return (
     <div className='mx-auto flex w-full max-w-prose flex-col gap-4 p-2 py-24'>
       {messages.map((m, i) => (
@@ -90,7 +96,7 @@ export default function Chat({
         <SubmitButton
           isLoading={isLoading}
           handleSubmit={handleSubmit}
-          stop={stop}
+          handleStop={handleStop}
         />
       </form>
     </div>
@@ -100,14 +106,17 @@ export default function Chat({
 function SubmitButton({
   isLoading,
   handleSubmit,
-  stop,
+  handleStop,
 }: {
   isLoading: boolean;
   handleSubmit: () => void;
-  stop: () => void;
+  handleStop: () => void;
 }) {
   return (
-    <Button size='icon' onClick={() => (!isLoading ? handleSubmit() : stop())}>
+    <Button
+      size='icon'
+      onClick={() => (!isLoading ? handleSubmit() : handleStop())}
+    >
       {!isLoading ? (
         <Send className='scale-125' />
       ) : (
