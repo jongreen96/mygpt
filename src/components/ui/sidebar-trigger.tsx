@@ -1,12 +1,15 @@
 'use client';
 
+import { useIsMobile } from '@/lib/utils';
 import { SidebarCloseIcon, SidebarOpenIcon } from 'lucide-react';
 import { Button } from './button';
 import { useSidebar } from './sidebar';
 
 export function CustomExternalTrigger() {
   const { toggleSidebar, state } = useSidebar();
-  if (state === 'expanded') return null;
+  const mobile = useIsMobile();
+
+  if (state === 'expanded' && !mobile) return null;
 
   return (
     <Button
