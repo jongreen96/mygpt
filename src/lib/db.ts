@@ -129,6 +129,9 @@ export async function getMessages(
         where: {
           deleted: null,
         },
+        orderBy: {
+          createdAt: 'asc',
+        },
       },
     },
   });
