@@ -105,20 +105,30 @@ export async function saveMessages({
   return conversationId;
 }
 
-export async function getMessages(conversationId: string) {
-  const messages = await prisma.message.findMany({
-    select: {
-      id: true,
-      role: true,
-      content: true,
-    },
+export async function getMessages(
+  conversationId: string,
+  userId: string | undefined,
+) {
+  const result = await prisma.conversation.findUnique({
     where: {
-      conversationId,
+      id: conversationId,
+      userId: userId,
+    },
+    include: {
+      Message: {
+        select: {
+          id: true,
+          content: true,
+          role: true,
+        },
+      },
     },
   });
 
+  const messages = result?.Message;
+
   // turn all messages id to string
-  const formattedMessages = messages.map((message) => {
+  const formattedMessages = messages?.map((message) => {
     return {
       id: message.id.toString(),
       content: message.content || '',
