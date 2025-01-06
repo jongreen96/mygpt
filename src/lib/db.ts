@@ -89,19 +89,19 @@ export async function saveMessages({
     totalTokens: number;
   };
 }) {
-  console.log(usage); // TODO: Record usage
-
   await prisma.message.createMany({
     data: [
       {
         conversationId,
         content: userMessage,
         role: 'user',
+        tokens: usage.promptTokens,
       },
       {
         conversationId,
         content: assistantMessage,
         role: 'assistant',
+        tokens: usage.completionTokens,
       },
     ],
   });
