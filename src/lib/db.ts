@@ -38,20 +38,23 @@ export async function createConversation({
   return newConversation.id;
 }
 
-export async function getConversation(conversationId: string) {
-  const conversation = await prisma.conversation.findUnique({
+export async function deleteConversation(conversationId: string) {
+  await prisma.conversation.update({
     where: {
       id: conversationId,
     },
+    data: {
+      deleted: new Date().toISOString(),
+    },
   });
 
-  return conversation;
-}
-
-export async function deleteConversation(conversationId: string) {
-  await prisma.conversation.delete({
+  await prisma.message.updateMany({
     where: {
-      id: conversationId,
+      conversationId,
+      deleted: null,
+    },
+    data: {
+      deleted: new Date().toISOString(),
     },
   });
 }
@@ -60,6 +63,7 @@ export async function getConversations(userId: string) {
   const conversations = await prisma.conversation.findMany({
     where: {
       userId,
+      deleted: null,
     },
     select: {
       id: true,
@@ -113,6 +117,7 @@ export async function getMessages(
     where: {
       id: conversationId,
       userId: userId,
+      deleted: null,
     },
     include: {
       Message: {
@@ -120,6 +125,9 @@ export async function getMessages(
           id: true,
           content: true,
           role: true,
+        },
+        where: {
+          deleted: null,
         },
       },
     },
@@ -140,9 +148,12 @@ export async function getMessages(
 }
 
 export async function deleteMessage(messageId: number) {
-  await prisma.message.delete({
+  await prisma.message.update({
     where: {
       id: messageId,
+    },
+    data: {
+      deleted: new Date().toISOString(),
     },
   });
 }
