@@ -69,6 +69,9 @@ export async function getConversations(userId: string) {
       id: true,
       subject: true,
     },
+    orderBy: {
+      createdAt: 'asc',
+    },
   });
 
   return conversations;
