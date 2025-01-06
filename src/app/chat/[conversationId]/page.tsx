@@ -27,6 +27,7 @@ export default async function ConversationPage({
 }: {
   params: Promise<{ conversationId: string }>;
 }) {
+  // TODO: Add conversation settings as prop to Chat
   const session = await getSession();
   const conversationId = (await params).conversationId;
   const messages = await fetchMessagesWithRetry(

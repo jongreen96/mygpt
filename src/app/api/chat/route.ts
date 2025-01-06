@@ -7,7 +7,7 @@ export const maxDuration = 600;
 
 export async function POST(req: Request) {
   // eslint-disable-next-line prefer-const
-  let { messages, conversationId } = await req.json();
+  let { messages, conversationId, modelSettings } = await req.json();
   const session = await auth();
   if (typeof session?.user?.id === 'undefined') return;
 
@@ -20,7 +20,8 @@ export async function POST(req: Request) {
   return createDataStreamResponse({
     execute: (dataStream) => {
       const result = streamText({
-        model: openai('gpt-4o-mini'),
+        model: openai(modelSettings.model),
+
         messages,
         // Beware: Abort signals don't triggert onFinish
         abortSignal: req.signal,

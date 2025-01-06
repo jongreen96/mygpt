@@ -1,8 +1,9 @@
 'use client';
 
+import { models, ModelSettingsType } from '@/lib/ai-models';
 import { useIsMobile } from '@/lib/utils';
 import { ChevronUp } from 'lucide-react';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Button } from '../ui/button';
 import {
   Drawer,
@@ -32,14 +33,24 @@ import {
   SheetTrigger,
 } from '../ui/sheet';
 
-export default function ModelSettings() {
+export default function ModelSettings({
+  modelSettings,
+  setModelSettings,
+}: {
+  modelSettings: ModelSettingsType;
+  setModelSettings: Dispatch<
+    SetStateAction<{
+      model: string;
+    }>
+  >;
+}) {
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
 
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger className='absolute bottom-9 flex items-center gap-2 rounded-t border p-2 py-0'>
+        <DrawerTrigger className='absolute bottom-9 flex items-center gap-2 rounded-t border bg-secondary p-2 py-0'>
           Model Settings
           <ChevronUp className='size-4' />
         </DrawerTrigger>
@@ -49,7 +60,12 @@ export default function ModelSettings() {
             <DrawerTitle>Model Settings</DrawerTitle>
           </DrawerHeader>
 
-          <Settings />
+          <div className='p-4'>
+            <Settings
+              modelSettings={modelSettings}
+              setModelSettings={setModelSettings}
+            />
+          </div>
 
           <DrawerFooter className='pt-2'>
             <DrawerClose asChild>
@@ -63,17 +79,20 @@ export default function ModelSettings() {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger className='absolute bottom-9 flex items-center gap-2 rounded-t border p-2 py-0'>
+      <SheetTrigger className='absolute bottom-9 flex items-center gap-2 rounded-t border bg-secondary p-2 py-0'>
         Model Settings
         <ChevronUp className='size-4' />
       </SheetTrigger>
 
-      <SheetContent>
+      <SheetContent className='flex flex-col'>
         <SheetHeader>
           <SheetTitle>Model Settings</SheetTitle>
         </SheetHeader>
 
-        <Settings />
+        <Settings
+          modelSettings={modelSettings}
+          setModelSettings={setModelSettings}
+        />
 
         <SheetFooter className='pt-2'>
           <SheetClose asChild>
@@ -87,25 +106,51 @@ export default function ModelSettings() {
   );
 }
 
-// TODO: Implement model settings
-function Settings() {
+function Settings({
+  modelSettings,
+  setModelSettings,
+}: {
+  modelSettings: ModelSettingsType;
+  setModelSettings: Dispatch<
+    SetStateAction<{
+      model: string;
+    }>
+  >;
+}) {
   return (
-    <section>
+    <section className='grow'>
       <div className='flex items-center gap-2'>
         Model:
-        <Select>
+        <Select
+          value={modelSettings.model}
+          onValueChange={(value) =>
+            setModelSettings((prev) => ({
+              ...prev,
+              model: value,
+            }))
+          }
+        >
           <SelectTrigger>
             <SelectValue placeholder='Select AI Model...' />
           </SelectTrigger>
 
           <SelectContent>
-            <SelectGroup>
-              <SelectLabel>OpenAI</SelectLabel>
-
-              <SelectItem value='model 1'>Model 1</SelectItem>
-              <SelectItem value='model 2'>Model 2</SelectItem>
-              <SelectItem value='model 3'>Model 3</SelectItem>
-            </SelectGroup>
+            {Object.entries(models).map((modelGroup) => {
+              return (
+                <SelectGroup key={modelGroup[0]}>
+                  <SelectLabel className='bg-secondary/25'>
+                    {modelGroup[0]}
+                  </SelectLabel>
+                  {Object.entries(modelGroup[1]).map((model) => {
+                    return (
+                      <SelectItem key={model[0]} value={model[0]}>
+                        {model[0]}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectGroup>
+              );
+            })}
           </SelectContent>
         </Select>
       </div>

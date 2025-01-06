@@ -3,8 +3,10 @@
 import { Button } from '@/components/ui/button';
 import MessageBubble from '@/components/ui/message-bubble';
 import { deleteMessageAction } from '@/lib/actions';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+import type { ModelSettingsType } from '@/lib/ai-models';
+import { defaultModelSettings } from '@/lib/ai-models';
 import { Message, useChat } from 'ai/react';
 import { AlertCircle, Send, Square } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -13,12 +15,18 @@ import ModelSettings from './model-settings';
 export default function Chat({
   conversationId,
   prevMessages,
+  conversationSettings,
 }: {
   conversationId?: string;
   prevMessages?: Message[];
+  conversationSettings?: ModelSettingsType;
 }) {
   const router = useRouter();
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  const [modelSettings, setModelSettings] = useState(
+    conversationSettings || defaultModelSettings,
+  );
 
   const {
     messages,
@@ -34,6 +42,7 @@ export default function Chat({
     initialMessages: prevMessages,
     body: {
       conversationId,
+      modelSettings,
     },
     onFinish(e) {
       // @ts-expect-error - conversationId is not on Message type
@@ -87,7 +96,11 @@ export default function Chat({
         onSubmit={handleSubmit}
         className='fixed bottom-0 mb-8 flex w-[calc(100%-16px)] max-w-[calc(65ch-16px)] items-center gap-2'
       >
-        <ModelSettings />
+        <ModelSettings
+          modelSettings={modelSettings}
+          setModelSettings={setModelSettings}
+        />
+
         <input
           className='grow rounded border border-gray-300 p-[5px] shadow-xl'
           value={input}
