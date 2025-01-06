@@ -8,6 +8,7 @@ import { useEffect, useRef } from 'react';
 import { Message, useChat } from 'ai/react';
 import { AlertCircle, Send, Square } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import ModelSettings from './model-settings';
 
 export default function Chat({
   conversationId,
@@ -86,8 +87,9 @@ export default function Chat({
         onSubmit={handleSubmit}
         className='fixed bottom-0 mb-8 flex w-[calc(100%-16px)] max-w-[calc(65ch-16px)] items-center gap-2'
       >
+        <ModelSettings />
         <input
-          className='grow rounded border border-gray-300 p-2 shadow-xl'
+          className='grow rounded border border-gray-300 p-[5px] shadow-xl'
           value={input}
           placeholder='Say something...'
           onChange={handleInputChange}
