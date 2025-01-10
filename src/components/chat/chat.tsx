@@ -109,7 +109,7 @@ export default function Chat({
         )}
 
         <input
-          className='grow rounded border border-gray-300 p-[5px] shadow-xl'
+          className='grow rounded border border-gray-300 p-[5px] shadow-lg'
           value={input}
           placeholder='Say something...'
           onChange={handleInputChange}
