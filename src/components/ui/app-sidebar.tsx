@@ -70,6 +70,8 @@ export async function AppSidebar() {
                     </DropdownMenuTrigger>
 
                     <DropdownMenuContent>
+                      {/* TODO: Add conversation information */}
+
                       <form
                         action={async () => {
                           'use server';

@@ -22,6 +22,7 @@ export async function POST(req: Request) {
     execute: (dataStream) => {
       const result = streamText({
         model: openai(modelSettings.model),
+        // TODO: Implement settings in api call
 
         messages,
         // Beware: Abort signals don't triggert onFinish
