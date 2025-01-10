@@ -15,6 +15,7 @@ export async function POST(req: Request) {
     conversationId = await createConversation({
       userId: session?.user?.id,
       messages,
+      modelSettings,
     });
 
   return createDataStreamResponse({

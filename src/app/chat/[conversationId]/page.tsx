@@ -1,7 +1,32 @@
 import Chat from '@/components/chat/chat';
-import { getMessages } from '@/lib/db';
+import { getConversation, getMessages } from '@/lib/db';
 import getSession from '@/lib/hooks/get-session';
 import { redirect } from 'next/navigation';
+
+export default async function ConversationPage({
+  params,
+}: {
+  params: Promise<{ conversationId: string }>;
+}) {
+  const session = await getSession();
+  const conversationId = (await params).conversationId;
+  const messages = await fetchMessagesWithRetry(
+    conversationId,
+    session.user?.id,
+  );
+  if (messages.length < 1) redirect('/chat');
+  const conversationSettings = await getConversation(conversationId);
+
+  return (
+    <Chat
+      conversationId={conversationId}
+      prevMessages={messages}
+      conversationSettings={JSON.parse(
+        conversationSettings?.settings || 'null',
+      )}
+    />
+  );
+}
 
 async function fetchMessagesWithRetry(
   conversationId: string,
@@ -20,21 +45,4 @@ async function fetchMessagesWithRetry(
     await new Promise((resolve) => setTimeout(resolve, delay * (i + 1)));
   }
   return [];
-}
-
-export default async function ConversationPage({
-  params,
-}: {
-  params: Promise<{ conversationId: string }>;
-}) {
-  // TODO: Add conversation settings as prop to Chat
-  const session = await getSession();
-  const conversationId = (await params).conversationId;
-  const messages = await fetchMessagesWithRetry(
-    conversationId,
-    session.user?.id,
-  );
-  if (messages.length < 1) redirect('/chat');
-
-  return <Chat conversationId={conversationId} prevMessages={messages} />;
 }

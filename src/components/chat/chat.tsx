@@ -101,10 +101,12 @@ export default function Chat({
         onSubmit={handleSubmit}
         className='fixed bottom-0 mb-8 flex w-[calc(100%-16px)] max-w-[calc(65ch-16px)] items-center gap-2'
       >
-        <ModelSettings
-          modelSettings={modelSettings}
-          setModelSettings={setModelSettings}
-        />
+        {!conversationId && (
+          <ModelSettings
+            modelSettings={modelSettings}
+            setModelSettings={setModelSettings}
+          />
+        )}
 
         <input
           className='grow rounded border border-gray-300 p-[5px] shadow-xl'

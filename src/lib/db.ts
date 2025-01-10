@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { ModelSettingsType } from './ai-models';
 import generateSubject from './hooks/generate-subject';
 
 const prismaClientSingleton = () => {
@@ -19,9 +20,11 @@ if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma;
 export async function createConversation({
   userId,
   messages,
+  modelSettings,
 }: {
   userId: string;
   messages: { role: string; content: string }[];
+  modelSettings: ModelSettingsType;
 }) {
   const subject = await generateSubject(messages);
 
@@ -29,6 +32,7 @@ export async function createConversation({
     data: {
       userId,
       subject: subject,
+      settings: JSON.stringify(modelSettings),
     },
     select: {
       id: true,
@@ -57,6 +61,21 @@ export async function deleteConversation(conversationId: string) {
       deleted: new Date().toISOString(),
     },
   });
+}
+
+export async function getConversation(conversationId: string) {
+  const conversation = await prisma.conversation.findUnique({
+    where: {
+      id: conversationId,
+    },
+    select: {
+      id: true,
+      subject: true,
+      settings: true,
+    },
+  });
+
+  return conversation;
 }
 
 export async function getConversations(userId: string) {
