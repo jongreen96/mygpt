@@ -12,14 +12,19 @@ import { AlertCircle, Send, Square } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import ModelSettings from './model-settings';
 
+const localSettings =
+  typeof window !== 'undefined'
+    ? JSON.parse(localStorage.getItem('conversationSettings') || 'null')
+    : (undefined as ModelSettingsType | undefined);
+
 export default function Chat({
   conversationId,
   prevMessages,
-  conversationSettings,
+  conversationSettings = localSettings,
 }: {
   conversationId?: string;
   prevMessages?: Message[];
-  conversationSettings?: ModelSettingsType;
+  conversationSettings?: ModelSettingsType | undefined;
 }) {
   const router = useRouter();
   const bottomRef = useRef<HTMLDivElement>(null);
