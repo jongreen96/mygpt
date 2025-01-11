@@ -151,6 +151,7 @@ function ConversationInformation({ settings }: { settings: string }) {
           <Table>
             <TableBody>
               {Object.entries(conversationSettings)
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 .filter(([_, value]) => value !== null)
                 .map(([key, value]) => (
                   <TableRow key={key}>
