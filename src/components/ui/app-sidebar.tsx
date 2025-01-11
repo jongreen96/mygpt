@@ -81,70 +81,7 @@ export async function AppSidebar() {
                     </Link>
                   </SidebarMenuButton>
 
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <SidebarMenuAction>
-                        <MoreHorizontalIcon />
-                      </SidebarMenuAction>
-                    </DropdownMenuTrigger>
-
-                    <DropdownMenuContent className='w-min'>
-                      <DropdownMenuItem asChild>
-                        <Dialog>
-                          <DialogTrigger className='w-full rounded p-1 text-left text-sm'>
-                            Information
-                          </DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle>
-                                Conversation Information
-                              </DialogTitle>
-                              <DialogDescription>
-                                Information about model settings as well as
-                                usage
-                              </DialogDescription>
-                            </DialogHeader>
-
-                            {conversation.settings}
-                          </DialogContent>
-                        </Dialog>
-                      </DropdownMenuItem>
-
-                      <DropdownMenuItem asChild>
-                        <AlertDialog>
-                          <AlertDialogTrigger className='w-full rounded bg-destructive/50 p-1 text-left text-sm'>
-                            Delete
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This action cannot be undone. This will
-                                permanently delete your conversation.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-
-                              <form
-                                action={async () => {
-                                  'use server';
-                                  await deleteConversation(conversation.id);
-                                  revalidatePath('/chat');
-                                }}
-                              >
-                                <AlertDialogAction asChild>
-                                  <button type='submit' className='w-full'>
-                                    Delete
-                                  </button>
-                                </AlertDialogAction>
-                              </form>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <ConversationDropdownMenu conversation={conversation} />
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -162,5 +99,79 @@ export async function AppSidebar() {
         </div>
       </SidebarFooter>
     </Sidebar>
+  );
+}
+
+function ConversationDropdownMenu({
+  conversation,
+}: {
+  conversation: {
+    id: string;
+    subject: string;
+    settings: string;
+  };
+}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <SidebarMenuAction>
+          <MoreHorizontalIcon />
+        </SidebarMenuAction>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent className='w-min'>
+        <DropdownMenuItem asChild>
+          <Dialog>
+            <DialogTrigger className='w-full rounded p-1 text-left text-sm'>
+              Information
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Conversation Information</DialogTitle>
+                <DialogDescription>
+                  Information about model settings as well as usage
+                </DialogDescription>
+              </DialogHeader>
+
+              {conversation.settings}
+            </DialogContent>
+          </Dialog>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <AlertDialog>
+            <AlertDialogTrigger className='w-full rounded bg-destructive/50 p-1 text-left text-sm'>
+              Delete
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your conversation.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                <form
+                  action={async () => {
+                    'use server';
+                    await deleteConversation(conversation.id);
+                    revalidatePath('/chat');
+                  }}
+                >
+                  <AlertDialogAction asChild>
+                    <button type='submit' className='w-full'>
+                      Delete
+                    </button>
+                  </AlertDialogAction>
+                </form>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
