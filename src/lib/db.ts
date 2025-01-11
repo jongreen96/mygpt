@@ -71,6 +71,7 @@ export async function getConversation(
     where: {
       id: conversationId,
       userId,
+      deleted: null,
     },
     select: {
       id: true,
@@ -84,6 +85,7 @@ export async function getConversation(
         },
         where: {
           conversationId: conversationId,
+          deleted: null,
         },
         orderBy: {
           createdAt: 'asc',
@@ -116,6 +118,7 @@ export async function getConversations(userId: string) {
     select: {
       id: true,
       subject: true,
+      settings: true,
     },
     orderBy: {
       createdAt: 'asc',

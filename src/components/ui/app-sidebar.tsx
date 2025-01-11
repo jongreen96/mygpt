@@ -16,7 +16,26 @@ import getSession from '@/lib/hooks/get-session';
 import { MessageSquare, MoreHorizontalIcon, SquarePen } from 'lucide-react';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from './alert-dialog';
 import { Button } from './button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -69,22 +88,61 @@ export async function AppSidebar() {
                       </SidebarMenuAction>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent>
-                      {/* TODO: Add conversation information */}
+                    <DropdownMenuContent className='w-min'>
+                      <DropdownMenuItem asChild>
+                        <Dialog>
+                          <DialogTrigger className='w-full rounded p-1 text-left text-sm'>
+                            Information
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>
+                                Conversation Information
+                              </DialogTitle>
+                              <DialogDescription>
+                                Information about model settings as well as
+                                usage
+                              </DialogDescription>
+                            </DialogHeader>
 
-                      <form
-                        action={async () => {
-                          'use server';
-                          await deleteConversation(conversation.id);
-                          revalidatePath('/chat');
-                        }}
-                      >
-                        <button type='submit' className='w-full'>
-                          <DropdownMenuItem className='bg-destructive/50'>
+                            {conversation.settings}
+                          </DialogContent>
+                        </Dialog>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem asChild>
+                        <AlertDialog>
+                          <AlertDialogTrigger className='w-full rounded bg-destructive/50 p-1 text-left text-sm'>
                             Delete
-                          </DropdownMenuItem>
-                        </button>
-                      </form>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This action cannot be undone. This will
+                                permanently delete your conversation.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                              <form
+                                action={async () => {
+                                  'use server';
+                                  await deleteConversation(conversation.id);
+                                  revalidatePath('/chat');
+                                }}
+                              >
+                                <AlertDialogAction asChild>
+                                  <button type='submit' className='w-full'>
+                                    Delete
+                                  </button>
+                                </AlertDialogAction>
+                              </form>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </SidebarMenuItem>
