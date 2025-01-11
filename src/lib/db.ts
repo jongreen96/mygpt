@@ -63,19 +63,48 @@ export async function deleteConversation(conversationId: string) {
   });
 }
 
-export async function getConversation(conversationId: string) {
+export async function getConversation(
+  conversationId: string,
+  userId: string | undefined,
+) {
   const conversation = await prisma.conversation.findUnique({
     where: {
       id: conversationId,
+      userId,
     },
     select: {
       id: true,
       subject: true,
       settings: true,
+      Message: {
+        select: {
+          id: true,
+          content: true,
+          role: true,
+        },
+        where: {
+          conversationId: conversationId,
+        },
+        orderBy: {
+          createdAt: 'asc',
+        },
+      },
     },
   });
 
-  return conversation;
+  if (!conversation) return null;
+
+  const transformedConversation = {
+    ...conversation,
+    Message: conversation.Message.map((message) => ({
+      ...message,
+      id: String(message.id),
+      content: message.content || '',
+      role: message.role as 'user' | 'assistant',
+    })),
+  };
+
+  return transformedConversation;
 }
 
 export async function getConversations(userId: string) {
@@ -129,47 +158,6 @@ export async function saveMessages({
   });
 
   return conversationId;
-}
-
-export async function getMessages(
-  conversationId: string,
-  userId: string | undefined,
-) {
-  const result = await prisma.conversation.findUnique({
-    where: {
-      id: conversationId,
-      userId: userId,
-      deleted: null,
-    },
-    include: {
-      Message: {
-        select: {
-          id: true,
-          content: true,
-          role: true,
-        },
-        where: {
-          deleted: null,
-        },
-        orderBy: {
-          createdAt: 'asc',
-        },
-      },
-    },
-  });
-
-  const messages = result?.Message;
-
-  // turn all messages id to string
-  const formattedMessages = messages?.map((message) => {
-    return {
-      id: message.id.toString(),
-      content: message.content || '',
-      role: message.role as 'user' | 'assistant',
-    };
-  });
-
-  return formattedMessages;
 }
 
 export async function deleteMessage(messageId: number) {
