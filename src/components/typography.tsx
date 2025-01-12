@@ -172,7 +172,7 @@ export const markdownComponents = {
     const match = /language-(\w+)/.exec(className || '');
     return !inline && match ? (
       <>
-        <div className='rounded-lg bg-secondary p-1'>
+        <div className='rounded-lg border bg-secondary p-1 shadow'>
           <div className='flex items-center justify-between px-1'>
             <span>{match[1]}</span>
             <Button
