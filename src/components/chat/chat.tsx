@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { ModelSettingsType } from '@/lib/ai-models';
 import { defaultModelSettings } from '@/lib/ai-models';
 import { Message, useChat } from 'ai/react';
-import { AlertCircle, Send, Square } from 'lucide-react';
+import { AlertCircle, Loader2, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import ModelSettings from './model-settings';
 
@@ -40,7 +40,6 @@ export default function Chat({
     handleInputChange,
     handleSubmit,
     isLoading,
-    stop,
     reload,
     error,
   } = useChat({
@@ -73,12 +72,6 @@ export default function Chat({
     reload();
     deleteMessageAction(messages[messages.length - 1].id);
     deleteMessageAction(messages[messages.length - 2].id);
-  };
-
-  const handleStop = () => {
-    stop();
-    // remove the last 2 messages from messages
-    setMessages(messages.slice(0, -2));
   };
 
   return (
@@ -115,11 +108,7 @@ export default function Chat({
           onChange={handleInputChange}
           autoFocus
         />
-        <SubmitButton
-          isLoading={isLoading}
-          handleSubmit={handleSubmit}
-          handleStop={handleStop}
-        />
+        <SubmitButton isLoading={isLoading} handleSubmit={handleSubmit} />
       </form>
     </div>
   );
@@ -128,21 +117,16 @@ export default function Chat({
 function SubmitButton({
   isLoading,
   handleSubmit,
-  handleStop,
 }: {
   isLoading: boolean;
   handleSubmit: () => void;
-  handleStop: () => void;
 }) {
   return (
-    <Button
-      size='icon'
-      onClick={() => (!isLoading ? handleSubmit() : handleStop())}
-    >
+    <Button size='icon' onClick={() => (!isLoading ? handleSubmit() : null)}>
       {!isLoading ? (
         <Send className='scale-125' />
       ) : (
-        <Square className='scale-125' />
+        <Loader2 className='animate-spin' />
       )}
     </Button>
   );

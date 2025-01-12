@@ -25,8 +25,6 @@ export async function POST(req: Request) {
         // TODO: Implement settings in api call
 
         messages,
-        // Beware: Abort signals don't triggert onFinish
-        abortSignal: req.signal,
         onFinish({ text, usage }) {
           dataStream.writeMessageAnnotation({
             conversationId,
