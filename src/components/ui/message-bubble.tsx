@@ -24,6 +24,7 @@ export default function MessageBubble({
         message.role === 'user' ? 'self-end bg-secondary' : 'border-none',
       )}
     >
+      {/* TODO: Custom scrollbars */}
       <Markdown className='overflow-hidden' components={markdownComponents}>
         {message.content}
       </Markdown>
