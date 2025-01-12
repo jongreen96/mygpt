@@ -14,7 +14,6 @@ import {
 import { ModelSettingsType } from '@/lib/ai-models';
 import { deleteConversation, getConversations } from '@/lib/db';
 import getSession from '@/lib/hooks/get-session';
-import { capitalize } from '@/lib/utils';
 import { MessageSquare, MoreHorizontalIcon, SquarePen } from 'lucide-react';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
@@ -155,8 +154,8 @@ function ConversationInformation({ settings }: { settings: string }) {
                 .filter(([_, value]) => value !== null)
                 .map(([key, value]) => (
                   <TableRow key={key}>
-                    <TableCell className='font-medium'>
-                      {capitalize(key)}
+                    <TableCell className='font-medium capitalize'>
+                      {key}
                     </TableCell>
                     <TableCell>{value}</TableCell>
                   </TableRow>
