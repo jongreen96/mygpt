@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import type { Message } from 'ai';
 import { RefreshCcw, Trash2 } from 'lucide-react';
 import Markdown from 'react-markdown';
-import { Code, Pre } from '../typography';
+import { markdownComponents } from '../typography';
 import { Button } from './button';
 
 export default function MessageBubble({
@@ -21,17 +21,10 @@ export default function MessageBubble({
       key={message.id}
       className={cn(
         'group relative w-fit max-w-[95%] whitespace-pre-wrap rounded border p-2',
-        message.role === 'user' ? 'self-end' : 'bg-secondary',
+        message.role === 'user' ? 'self-end bg-secondary' : 'border-none',
       )}
     >
-      <Markdown
-        components={{
-          code: (props) => <Code {...props} />,
-          pre: (props) => <Pre {...props} />,
-        }}
-      >
-        {message.content}
-      </Markdown>
+      <Markdown components={markdownComponents}>{message.content}</Markdown>
 
       <div
         className={cn(

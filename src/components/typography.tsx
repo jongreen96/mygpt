@@ -1,4 +1,9 @@
 import { cn } from '@/lib/utils';
+import { CopyIcon } from 'lucide-react';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { stackoverflowDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { toast } from 'sonner';
+import { Button } from './ui/button';
 
 export function H1({
   children,
@@ -155,3 +160,50 @@ export function Pre({
     </pre>
   );
 }
+
+interface CodeProps {
+  inline?: boolean;
+  className?: string;
+  children: React.ReactNode;
+}
+
+export const markdownComponents = {
+  code({ inline, className, children, ...props }: CodeProps) {
+    const match = /language-(\w+)/.exec(className || '');
+    return !inline && match ? (
+      <>
+        <div className='rounded-lg bg-secondary p-1'>
+          <div className='flex items-center justify-between px-1'>
+            <span>{match[1]}</span>
+            <Button
+              asChild
+              variant='ghost'
+              className='aspect-square h-6 p-0'
+              onClick={() => {
+                navigator.clipboard.writeText(String(children));
+                toast('Code copied to clipboard', {
+                  description: `Language: ${match[1]}`,
+                });
+              }}
+            >
+              <CopyIcon className='size-4 cursor-pointer' />
+            </Button>
+          </div>
+          <SyntaxHighlighter
+            style={stackoverflowDark}
+            language={match[1]}
+            PreTag='div'
+            showLineNumbers
+            {...props}
+          >
+            {String(children).replace(/\n$/, '')}
+          </SyntaxHighlighter>
+        </div>
+      </>
+    ) : (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    );
+  },
+};
