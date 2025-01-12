@@ -75,7 +75,7 @@ export default function Chat({
   };
 
   return (
-    <div className='mx-auto flex w-full max-w-prose flex-col gap-4 p-2 py-24'>
+    <div className='mx-auto flex w-full max-w-3xl flex-col gap-4 p-2 py-24'>
       {messages.map((m, i) => (
         <MessageBubble
           key={i}
@@ -92,7 +92,7 @@ export default function Chat({
 
       <form
         onSubmit={handleSubmit}
-        className='fixed bottom-0 mb-8 flex w-[calc(100%-16px)] max-w-[calc(65ch-16px)] items-center gap-2'
+        className='fixed bottom-0 mb-8 flex w-[calc(100%-16px)] max-w-[752px] items-center gap-2'
       >
         {!conversationId && (
           <ModelSettings
