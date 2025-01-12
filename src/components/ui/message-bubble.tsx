@@ -20,8 +20,8 @@ export default function MessageBubble({
     <div
       key={message.id}
       className={cn(
-        'group relative w-fit max-w-[95%] whitespace-pre-wrap rounded border p-2',
-        message.role === 'user' ? 'self-end bg-secondary' : 'border-none',
+        'group relative w-fit max-w-[95%] whitespace-pre-wrap rounded border',
+        message.role === 'user' ? 'self-end bg-secondary p-2' : 'border-none',
       )}
     >
       {/* TODO: Custom scrollbars */}
