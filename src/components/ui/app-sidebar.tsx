@@ -56,7 +56,7 @@ export async function AppSidebar() {
     : [];
 
   return (
-    <Sidebar variant='floating'>
+    <Sidebar variant='floating' className='h-dvh'>
       <SidebarHeader>
         <div className='flex items-center justify-between'>
           <CustomInternalTrigger />
