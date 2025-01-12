@@ -24,7 +24,9 @@ export default function MessageBubble({
         message.role === 'user' ? 'self-end bg-secondary' : 'border-none',
       )}
     >
-      <Markdown components={markdownComponents}>{message.content}</Markdown>
+      <Markdown className='overflow-hidden' components={markdownComponents}>
+        {message.content}
+      </Markdown>
 
       <div
         className={cn(
