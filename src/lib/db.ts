@@ -163,13 +163,20 @@ export async function saveMessages({
   return conversationId;
 }
 
-export async function deleteMessage(messageId: number) {
-  await prisma.message.update({
-    where: {
-      id: messageId,
-    },
-    data: {
-      deleted: new Date().toISOString(),
-    },
-  });
+export async function deleteMessage(
+  messageId: number,
+  conversationId: string | undefined,
+) {
+  if (conversationId) {
+    deleteConversation(conversationId);
+  } else {
+    await prisma.message.update({
+      where: {
+        id: messageId,
+      },
+      data: {
+        deleted: new Date().toISOString(),
+      },
+    });
+  }
 }

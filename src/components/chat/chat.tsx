@@ -65,7 +65,12 @@ export default function Chat({
 
   const handleDelete = (id: string) => {
     setMessages(messages.filter((message) => message.id !== id));
-    deleteMessageAction(id);
+    const deleteConversation =
+      messages.length === 1 ? conversationId : undefined;
+
+    deleteMessageAction(id, deleteConversation);
+
+    if (deleteConversation) router.refresh();
   };
 
   const handleReload = () => {
