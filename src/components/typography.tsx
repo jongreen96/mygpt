@@ -194,6 +194,7 @@ export const markdownComponents = {
             language={match[1]}
             PreTag='div'
             showLineNumbers
+            customStyle={{ borderRadius: 4 }}
             {...props}
           >
             {String(children).replace(/\n$/, '')}
