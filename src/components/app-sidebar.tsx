@@ -27,8 +27,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from './alert-dialog';
-import { Button } from './button';
+} from './ui/alert-dialog';
+import { Button } from './ui/button';
 import {
   Dialog,
   DialogContent,
@@ -36,18 +36,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './dialog';
+} from './ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from './dropdown-menu';
-import { Separator } from './separator';
-import { CustomInternalTrigger } from './sidebar-trigger';
-import { Table, TableBody, TableCell, TableRow } from './table';
-import { ThemeToggle } from './theme-selector';
-import UserAvatar from './user-avatar';
+} from './ui/dropdown-menu';
+import { Separator } from './ui/separator';
+import { CustomInternalTrigger } from './ui/sidebar-trigger';
+import { Table, TableBody, TableCell, TableRow } from './ui/table';
+import { ThemeToggle } from './ui/theme-selector';
+import UserAvatar from './ui/user-avatar';
 
 export async function AppSidebar() {
   const session = await getSession();

@@ -71,13 +71,11 @@ export const models = {
 
 export const defaultModelSettings = {
   model: 'gpt-4o-mini',
-  maxTokens: null,
-  temperature: null,
-  topP: null,
-  topK: null,
-  presencePenalty: null,
-  frequencyPenalty: null,
-  seed: null,
+  maxTokens: 0,
+  temperature: 1,
+  topP: 1,
+  presencePenalty: 0,
+  frequencyPenalty: 0,
 };
 
 export type ModelSettingsType = typeof defaultModelSettings;
