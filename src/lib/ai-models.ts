@@ -30,14 +30,15 @@ export const models = {
         outputCost: 80,
       },
     }
-    */
-    o1: {
+    // o1 is awaiting Tier 5 ($1000 spent)
+    'o1': {
       company: 'OpenAI',
       description:
         "o1 is OpenAI's most powerful reasoning model that supports tools, Structured Outputs, and vision. The model has 200K context and an October 2023 knowledge cutoff.",
       inputCost: 15,
       outputCost: 60,
     },
+    */
     'o1-mini': {
       company: 'OpenAI',
       description:
