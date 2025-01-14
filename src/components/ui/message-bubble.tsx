@@ -28,6 +28,19 @@ export default function MessageBubble({
         {message.content}
       </Markdown>
 
+      <div>
+        {message.experimental_attachments
+          ?.filter((attachment) => attachment.contentType?.startsWith('image/'))
+          .map((attachment, index) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={`${message.id}-${index}`}
+              src={attachment.url}
+              alt={attachment.name}
+            />
+          ))}
+      </div>
+
       <div
         className={cn(
           'absolute hidden gap-1 rounded-lg border border-white bg-secondary p-1 group-hover:flex dark:border-black',

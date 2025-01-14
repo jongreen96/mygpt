@@ -3,12 +3,12 @@
 import { Button } from '@/components/ui/button';
 import MessageBubble from '@/components/ui/message-bubble';
 import { deleteMessageAction } from '@/lib/actions';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import type { ModelSettingsType } from '@/lib/ai-models';
 import { defaultModelSettings } from '@/lib/ai-models';
 import { Message, useChat } from 'ai/react';
-import { AlertCircle, Loader2, Send } from 'lucide-react';
+import { AlertCircle, Loader2, PaperclipIcon, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import ModelSettings from './model-settings';
 
@@ -79,6 +79,19 @@ export default function Chat({
     deleteMessageAction(messages[messages.length - 2].id);
   };
 
+  const customHandleSubmit = (e: React.FormEvent) => {
+    handleSubmit(e, {
+      experimental_attachments: files,
+    });
+
+    setFiles(undefined);
+
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const [files, setFiles] = useState<FileList | undefined>(undefined);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   return (
     <div className='mx-auto flex w-full max-w-3xl flex-col gap-4 p-2 py-24'>
       {messages.map((m, i) => (
@@ -96,7 +109,7 @@ export default function Chat({
       <ErrorMessage error={error} handleReload={handleReload} />
 
       <form
-        onSubmit={handleSubmit}
+        onSubmit={customHandleSubmit}
         className='fixed bottom-0 mb-8 flex w-[calc(100%-16px)] max-w-[752px] items-center gap-2'
       >
         {!conversationId && (
@@ -107,13 +120,43 @@ export default function Chat({
         )}
 
         <input
+          type='file'
+          onChange={(event) => {
+            if (event.target.files) {
+              setFiles(event.target.files);
+            }
+          }}
+          multiple
+          ref={fileInputRef}
+          className='hidden'
+        />
+
+        <Button
+          size='icon'
+          variant='outline'
+          type='button'
+          onClick={() => fileInputRef.current?.click()}
+          className='relative'
+        >
+          <PaperclipIcon className='scale-125' />
+          {files && files.length > 0 && (
+            <div className='absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground'>
+              {files.length}
+            </div>
+          )}
+        </Button>
+
+        <input
           className='grow rounded border border-gray-300 p-[5px] shadow-lg'
           value={input}
           placeholder='Say something...'
           onChange={handleInputChange}
           autoFocus
         />
-        <SubmitButton isLoading={isLoading} handleSubmit={handleSubmit} />
+        <SubmitButton
+          isLoading={isLoading}
+          customHandleSubmit={customHandleSubmit}
+        />
       </form>
     </div>
   );
@@ -121,13 +164,16 @@ export default function Chat({
 
 function SubmitButton({
   isLoading,
-  handleSubmit,
+  customHandleSubmit,
 }: {
   isLoading: boolean;
-  handleSubmit: () => void;
+  customHandleSubmit: (e: React.FormEvent) => void;
 }) {
   return (
-    <Button size='icon' onClick={() => (!isLoading ? handleSubmit() : null)}>
+    <Button
+      size='icon'
+      onClick={(e) => (!isLoading ? customHandleSubmit(e) : null)}
+    >
       {!isLoading ? (
         <Send className='scale-125' />
       ) : (

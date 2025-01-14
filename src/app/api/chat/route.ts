@@ -24,6 +24,19 @@ export async function POST(req: Request) {
       modelSettings,
     });
 
+  // TODO: Save files to R2 and add reference to db
+  /*
+    console.log(messages[0].experimental_attachments);
+     ^ Returns v
+    [
+      {
+        name: img-id.filetype,
+        contentType: 'image/png',
+        url: base64file
+      }
+    ]
+  */
+
   return createDataStreamResponse({
     execute: (dataStream) => {
       const result = streamText({
