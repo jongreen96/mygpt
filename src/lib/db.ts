@@ -88,7 +88,7 @@ export async function getConversation(
           deleted: null,
         },
         orderBy: {
-          createdAt: 'asc',
+          id: 'asc',
         },
       },
     },
