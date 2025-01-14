@@ -27,18 +27,14 @@ export async function POST(req: Request) {
   return createDataStreamResponse({
     execute: (dataStream) => {
       const result = streamText({
-        model: openai(modelSettings.model),
+        model: openai(modelSettings.model) || openai('gpt-4o-mini'),
         maxTokens: modelSettings.maxTokens || undefined,
-        temperature: Math.max(0, Math.min(2, modelSettings.temperature)),
-        topP: Math.max(0, Math.min(1, modelSettings.topP)),
-        presencePenalty: Math.max(
-          -2,
-          Math.min(2, modelSettings.presencePenalty),
-        ),
-        frequencyPenalty: Math.max(
-          -2,
-          Math.min(2, modelSettings.frequencyPenalty),
-        ),
+        temperature: Math.max(0, Math.min(2, modelSettings.temperature)) || 1,
+        topP: Math.max(0, Math.min(1, modelSettings.topP)) || 0,
+        presencePenalty:
+          Math.max(-2, Math.min(2, modelSettings.presencePenalty)) || 0,
+        frequencyPenalty:
+          Math.max(-2, Math.min(2, modelSettings.frequencyPenalty)) || 0,
 
         messages,
         onFinish({ text, usage }) {
