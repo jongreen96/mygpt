@@ -121,7 +121,7 @@ export async function getConversations(userId: string) {
       settings: true,
     },
     orderBy: {
-      createdAt: 'asc',
+      createdAt: 'desc',
     },
   });
 
