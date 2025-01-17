@@ -4,7 +4,7 @@ import { deleteMessage } from '@/lib/db';
 
 export async function deleteMessageAction(
   messageId: string,
-  conversationId?: string | undefined,
+  conversationId?: string,
 ) {
   await deleteMessage(Number(messageId), conversationId);
 }

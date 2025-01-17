@@ -170,7 +170,7 @@ export async function saveMessages({
 
 export async function deleteMessage(
   messageId: number,
-  conversationId: string | undefined,
+  conversationId?: string,
 ) {
   if (conversationId) {
     deleteConversation(conversationId);
