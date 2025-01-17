@@ -37,6 +37,7 @@ export default function MessageBubble({
               key={`${message.id}-${index}`}
               src={attachment.url}
               alt={attachment.name}
+              className='w-64 rounded'
             />
           ))}
       </div>

@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { Message } from 'ai';
 import { ModelSettingsType } from './ai-models';
 import generateSubject from './hooks/generate-subject';
 
@@ -82,7 +83,7 @@ export async function getConversation(
           id: true,
           content: true,
           role: true,
-          attachments: true,
+          experimental_attachments: true,
         },
         where: {
           conversationId: conversationId,
@@ -136,7 +137,7 @@ export async function saveMessages({
   usage,
 }: {
   conversationId: string;
-  userMessage: string;
+  userMessage: Message;
   assistantMessage: string;
   usage: {
     promptTokens: number;
@@ -148,7 +149,10 @@ export async function saveMessages({
     data: [
       {
         conversationId,
-        content: userMessage,
+        content: userMessage.content,
+        experimental_attachments: userMessage.experimental_attachments
+          ? JSON.parse(JSON.stringify(userMessage.experimental_attachments))
+          : undefined,
         role: 'user',
         tokens: usage.promptTokens,
       },

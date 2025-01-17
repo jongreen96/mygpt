@@ -37,7 +37,10 @@ export async function POST(req: Request) {
 
   const lastMessage = messages[messages.length - 1];
   if (lastMessage?.experimental_attachments) {
-    for (const attachment of lastMessage.experimental_attachments) {
+    for (const [
+      index,
+      attachment,
+    ] of lastMessage.experimental_attachments.entries()) {
       const command = new PutObjectCommand({
         Bucket: process.env.CLOUDFLARE_BUCKET_NAME!,
         Key: `${conversationId}/${attachment.name}`,
@@ -47,7 +50,8 @@ export async function POST(req: Request) {
 
       await client.send(command);
 
-      // TODO: Link R2 file to message in database
+      messages[messages.length - 1].experimental_attachments![index].url =
+        `${process.env.CLOUDFLARE_DEV_URL!}/${conversationId}/${attachment.name}`;
     }
   }
 
@@ -68,10 +72,10 @@ export async function POST(req: Request) {
           dataStream.writeMessageAnnotation({
             conversationId,
           });
-          const userMessage = messages.pop();
+
           saveMessages({
             conversationId,
-            userMessage: userMessage?.content || '',
+            userMessage: messages[messages.length - 1],
             assistantMessage: text,
             usage,
           });
