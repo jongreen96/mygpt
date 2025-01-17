@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     ] of lastMessage.experimental_attachments.entries()) {
       const command = new PutObjectCommand({
         Bucket: process.env.CLOUDFLARE_BUCKET_NAME!,
-        Key: `${conversationId}/${attachment.name}`,
+        Key: `user-images/${conversationId}/${attachment.name}`,
         ContentType: attachment.contentType,
         Body: Buffer.from(attachment.url.split(',')[1], 'base64'),
       });
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
       await client.send(command);
 
       messages[messages.length - 1].experimental_attachments![index].url =
-        `${process.env.CLOUDFLARE_DEV_URL!}/${conversationId}/${attachment.name}`;
+        `${process.env.CLOUDFLARE_DEV_URL!}/user-images/${conversationId}/${attachment.name}`;
     }
   }
 
