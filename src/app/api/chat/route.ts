@@ -35,6 +35,7 @@ export async function POST(req: Request) {
       modelSettings,
     });
 
+  // Save attachments to Cloudflare
   const lastMessage = messages[messages.length - 1];
   if (lastMessage?.experimental_attachments) {
     for (const [
