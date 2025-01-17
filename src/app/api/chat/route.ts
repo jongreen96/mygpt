@@ -51,6 +51,7 @@ export async function POST(req: Request) {
 
       await client.send(command);
 
+      // TODO: IMPORTANT! Swap from dev url before release
       messages[messages.length - 1].experimental_attachments![index].url =
         `${process.env.CLOUDFLARE_DEV_URL!}/user-images/${conversationId}/${attachment.name}`;
     }
