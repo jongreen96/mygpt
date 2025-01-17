@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Message } from 'ai';
+import { Attachment, Message } from 'ai';
 import { ModelSettingsType } from './ai-models';
 import generateSubject from './hooks/generate-subject';
 
@@ -105,6 +105,8 @@ export async function getConversation(
       id: String(message.id),
       content: message.content || '',
       role: message.role as 'user' | 'assistant',
+      experimental_attachments:
+        message.experimental_attachments as unknown as Attachment[],
     })),
   };
 
