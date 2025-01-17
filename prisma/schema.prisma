@@ -96,6 +96,7 @@ model Message {
   id             Int          @id @default(autoincrement())
   conversationId String
   content        String?
+  attachments    String[]
   role           String
   tokens         Int
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)

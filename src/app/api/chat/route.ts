@@ -2,9 +2,20 @@ import { ModelSettingsType } from '@/lib/ai-models';
 import { auth } from '@/lib/auth';
 import { createConversation, saveMessages } from '@/lib/db';
 import { openai } from '@ai-sdk/openai';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { createDataStreamResponse, Message, streamText } from 'ai';
 
 export const maxDuration = 600;
+
+const client = new S3Client({
+  region: 'auto',
+  endpoint: `https://${process.env.CLOUDFLARE_ACCOUNT_ID!}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.CLOUDFLARE_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.CLOUDFLARE_SECRET_KEY!,
+  },
+  requestChecksumCalculation: 'WHEN_REQUIRED',
+});
 
 export async function POST(req: Request) {
   // eslint-disable-next-line prefer-const
@@ -24,18 +35,21 @@ export async function POST(req: Request) {
       modelSettings,
     });
 
-  // TODO: Save files to R2 and add reference to db
-  /*
-    console.log(messages[0].experimental_attachments);
-     ^ Returns v
-    [
-      {
-        name: img-id.filetype,
-        contentType: 'image/png',
-        url: base64file
-      }
-    ]
-  */
+  const lastMessage = messages[messages.length - 1];
+  if (lastMessage?.experimental_attachments) {
+    for (const attachment of lastMessage.experimental_attachments) {
+      const command = new PutObjectCommand({
+        Bucket: process.env.CLOUDFLARE_BUCKET_NAME!,
+        Key: `${conversationId}/${attachment.name}`,
+        ContentType: attachment.contentType,
+        Body: Buffer.from(attachment.url.split(',')[1], 'base64'),
+      });
+
+      await client.send(command);
+
+      // TODO: Link R2 file to message in database
+    }
+  }
 
   return createDataStreamResponse({
     execute: (dataStream) => {
@@ -54,9 +68,10 @@ export async function POST(req: Request) {
           dataStream.writeMessageAnnotation({
             conversationId,
           });
+          const userMessage = messages.pop();
           saveMessages({
             conversationId,
-            userMessage: messages.pop()?.content || '',
+            userMessage: userMessage?.content || '',
             assistantMessage: text,
             usage,
           });

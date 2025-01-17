@@ -82,6 +82,7 @@ export async function getConversation(
           id: true,
           content: true,
           role: true,
+          attachments: true,
         },
         where: {
           conversationId: conversationId,
