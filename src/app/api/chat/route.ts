@@ -18,15 +18,15 @@ const client = new S3Client({
 });
 
 export async function POST(req: Request) {
+  const session = await auth();
+  if (typeof session?.user?.id === 'undefined') return;
+
   // eslint-disable-next-line prefer-const
   let { messages, conversationId, modelSettings } = (await req.json()) as {
     messages: Message[];
     conversationId: string;
     modelSettings: ModelSettingsType;
   };
-
-  const session = await auth();
-  if (typeof session?.user?.id === 'undefined') return;
 
   if (!conversationId)
     conversationId = await createConversation({
@@ -35,27 +35,7 @@ export async function POST(req: Request) {
       modelSettings,
     });
 
-  // Save attachments to Cloudflare
-  const lastMessage = messages[messages.length - 1];
-  if (lastMessage?.experimental_attachments) {
-    for (const [
-      index,
-      attachment,
-    ] of lastMessage.experimental_attachments.entries()) {
-      const command = new PutObjectCommand({
-        Bucket: process.env.CLOUDFLARE_BUCKET_NAME!,
-        Key: `user-images/${conversationId}/${attachment.name}`,
-        ContentType: attachment.contentType,
-        Body: Buffer.from(attachment.url.split(',')[1], 'base64'),
-      });
-
-      await client.send(command);
-
-      // TODO: IMPORTANT! Swap from dev url before release
-      messages[messages.length - 1].experimental_attachments![index].url =
-        `${process.env.CLOUDFLARE_DEV_URL!}/user-images/${conversationId}/${attachment.name}`;
-    }
-  }
+  await processAttachments(messages, conversationId);
 
   return createDataStreamResponse({
     execute: (dataStream) => {
@@ -90,4 +70,23 @@ export async function POST(req: Request) {
       return error instanceof Error ? error.message : String(error);
     },
   });
+}
+
+async function processAttachments(messages: Message[], conversationId: string) {
+  const lastMessage = messages[messages.length - 1];
+  if (!lastMessage?.experimental_attachments) return;
+
+  for (const attachment of lastMessage.experimental_attachments) {
+    const command = new PutObjectCommand({
+      Bucket: process.env.CLOUDFLARE_BUCKET_NAME!,
+      Key: `user-images/${conversationId}/${attachment.name}`,
+      ContentType: attachment.contentType,
+      Body: Buffer.from(attachment.url.split(',')[1], 'base64'),
+    });
+
+    await client.send(command);
+
+    // TODO: IMPORTANT! Swap from dev url before release
+    attachment.url = `${process.env.CLOUDFLARE_DEV_URL!}/user-images/${conversationId}/${attachment.name}`;
+  }
 }
