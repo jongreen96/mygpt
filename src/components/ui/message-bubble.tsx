@@ -1,9 +1,16 @@
 import { cn } from '@/lib/utils';
-import type { Message } from 'ai';
+import type { Attachment, Message } from 'ai';
 import { RefreshCcw, Trash2 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { markdownComponents } from '../typography';
 import { Button } from './button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './dialog';
 
 export default function MessageBubble({
   message,
@@ -24,23 +31,30 @@ export default function MessageBubble({
         message.role === 'user' ? 'self-end bg-secondary p-2' : 'border-none',
       )}
     >
-      <Markdown className='overflow-hidden' components={markdownComponents}>
-        {message.content}
-      </Markdown>
-
-      <div>
+      <div
+        className={cn(
+          'grid gap-2',
+          message.experimental_attachments?.length === 1
+            ? 'grid-cols-1'
+            : 'grid-cols-[repeat(auto-fit,minmax(4rem,1fr))]',
+        )}
+      >
         {message.experimental_attachments
           ?.filter((attachment) => attachment.contentType?.startsWith('image/'))
           .map((attachment, index) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              key={`${message.id}-${index}`}
-              src={attachment.url}
-              alt={attachment.name}
-              className='w-64 rounded'
-            />
+            <ImagePreview attachment={attachment} key={index} />
           ))}
       </div>
+
+      <Markdown
+        className={cn(
+          'overflow-hidden',
+          (message.experimental_attachments?.length ?? 0) > 0 && 'mt-2',
+        )}
+        components={markdownComponents}
+      >
+        {message.content}
+      </Markdown>
 
       <div
         className={cn(
@@ -80,5 +94,34 @@ function ReloadButton({
     >
       <RefreshCcw />
     </Button>
+  );
+}
+
+function ImagePreview({ attachment }: { attachment: Attachment }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className='aspect-square w-full cursor-pointer overflow-hidden rounded bg-gray-200'>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={attachment.url}
+            alt={`User image`}
+            className='h-full w-full max-w-64 object-cover'
+          />
+        </div>
+      </DialogTrigger>
+
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{attachment.name}</DialogTitle>
+        </DialogHeader>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={attachment.url}
+          alt={`User image`}
+          className='h-full w-full'
+        />
+      </DialogContent>
+    </Dialog>
   );
 }
