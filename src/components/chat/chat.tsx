@@ -121,6 +121,7 @@ export default function Chat({
 
         <input
           type='file'
+          accept='image/*'
           onChange={(event) => {
             if (event.target.files) {
               setFiles(event.target.files);
