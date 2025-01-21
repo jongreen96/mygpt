@@ -2,7 +2,7 @@
 
 import { models, ModelSettingsType } from '@/lib/ai-models';
 import { useIsMobile } from '@/lib/utils';
-import { ChevronUp, MessageCircleQuestionIcon } from 'lucide-react';
+import { MessageCircleQuestionIcon, Settings2 } from 'lucide-react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import {
   Accordion,
@@ -71,9 +71,10 @@ export default function ModelSettings({
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger className='absolute bottom-9 flex items-center gap-2 rounded-t border bg-secondary p-2 py-0'>
-          Model Settings
-          <ChevronUp className='size-4' />
+        <DrawerTrigger asChild>
+          <Button variant='secondary' size='icon'>
+            <Settings2 className='scale-125' />
+          </Button>
         </DrawerTrigger>
 
         <DrawerContent>
@@ -108,9 +109,10 @@ export default function ModelSettings({
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger className='absolute bottom-9 flex items-center gap-2 rounded-t border bg-secondary p-2 py-0'>
-        Model Settings
-        <ChevronUp className='size-4' />
+      <SheetTrigger asChild>
+        <Button variant='secondary' size='icon'>
+          <Settings2 className='scale-125' />
+        </Button>
       </SheetTrigger>
 
       <SheetContent className='flex flex-col'>

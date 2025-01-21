@@ -8,7 +8,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { ModelSettingsType } from '@/lib/ai-models';
 import { defaultModelSettings } from '@/lib/ai-models';
 import { Message, useChat } from 'ai/react';
-import { AlertCircle, Loader2, PaperclipIcon, Send } from 'lucide-react';
+import { AlertCircle, ImagePlus, Loader2, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import ModelSettings from './model-settings';
 
@@ -112,13 +112,6 @@ export default function Chat({
         onSubmit={customHandleSubmit}
         className='fixed bottom-0 mb-8 flex w-[calc(100%-16px)] max-w-[752px] items-center gap-2'
       >
-        {!conversationId && (
-          <ModelSettings
-            modelSettings={modelSettings}
-            setModelSettings={setModelSettings}
-          />
-        )}
-
         <input
           type='file'
           accept='image/*'
@@ -139,7 +132,7 @@ export default function Chat({
           onClick={() => fileInputRef.current?.click()}
           className='relative'
         >
-          <PaperclipIcon className='scale-125' />
+          <ImagePlus className='scale-125' />
           {files && files.length > 0 && (
             <div className='absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground'>
               {files.length}
@@ -154,6 +147,14 @@ export default function Chat({
           onChange={handleInputChange}
           autoFocus
         />
+
+        {!conversationId && (
+          <ModelSettings
+            modelSettings={modelSettings}
+            setModelSettings={setModelSettings}
+          />
+        )}
+
         <SubmitButton
           isLoading={isLoading}
           customHandleSubmit={customHandleSubmit}
