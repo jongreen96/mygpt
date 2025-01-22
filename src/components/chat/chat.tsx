@@ -171,15 +171,26 @@ function SubmitButton({
   isLoading: boolean;
   customHandleSubmit: (e: React.FormEvent) => void;
 }) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      !isLoading && customHandleSubmit(e as unknown as React.FormEvent);
+    }
+  };
+
   return (
     <Button
-      size='icon'
-      onClick={(e) => (!isLoading ? customHandleSubmit(e) : null)}
+      type="submit"
+      size="icon"
+      aria-label={isLoading ? "Sending message..." : "Send message"}
+      disabled={isLoading}
+      onClick={(e) => customHandleSubmit(e)}
+      onKeyDown={handleKeyDown}
     >
       {!isLoading ? (
-        <Send className='scale-125' />
+        <Send className="scale-125" aria-hidden="true" />
       ) : (
-        <Loader2 className='animate-spin' />
+        <Loader2 className="animate-spin" aria-hidden="true" />
       )}
     </Button>
   );
@@ -193,16 +204,32 @@ function ErrorMessage({
   handleReload: () => void;
 }) {
   if (!error) return null;
+
   return (
-    <div className='flex gap-2 rounded bg-destructive/20 p-2'>
-      <AlertCircle className='shrink-0 text-destructive' />
-      <p>
-        An error has occoured,{' '}
-        <span className='cursor-pointer underline' onClick={handleReload}>
-          Reload
-        </span>{' '}
-        resonse or type a new message.
-      </p>
+    <div
+      className="flex gap-2 rounded bg-destructive/20 p-2"
+      role="alert"
+      aria-live="polite"
+    >
+      <AlertCircle className="shrink-0 text-destructive" aria-hidden="true" />
+      <div>
+        <p>
+          An error has occurred.{' '}
+          <button
+            className="cursor-pointer underline hover:text-destructive focus:outline-none focus:ring-2 focus:ring-destructive"
+            onClick={handleReload}
+            onKeyDown={(e) => e.key === 'Enter' && handleReload()}
+          >
+            Reload
+          </button>{' '}
+          response or type a new message.
+        </p>
+        {error.message && (
+          <p className="mt-1 text-sm text-destructive/80">
+            {error.message}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
