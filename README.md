@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MyGPT
+
+A modern web application built with Next.js 15, TypeScript, and Tailwind CSS that leverages AI capabilities.
+
+## Features
+
+- 🚀 Built with Next.js 15 and React 19
+- 🎨 Styled with Tailwind CSS and Radix UI components
+- 🔒 Authentication with NextAuth.js
+- 💾 Database integration with Prisma
+- 🎭 Dark/Light theme support
+- 🔄 Real-time AI interactions
+- 📦 AWS S3 integration for file storage
+- 📧 Email functionality with Nodemailer
+
+## Prerequisites
+
+- Node.js (Latest LTS version recommended)
+- PostgreSQL database
+- AWS account (for S3 storage)
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/jongreen96/mygpt.git
+   cd mygpt
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Set up your environment variables:
+   Create a `.env` file in the root directory and add your configuration:
+   ```
+   DATABASE_URL="your-database-url"
+   NEXTAUTH_SECRET="your-auth-secret"
+   NEXTAUTH_URL="http://localhost:3000"
+   
+   # AWS Configuration
+   AWS_ACCESS_KEY_ID="your-aws-access-key"
+   AWS_SECRET_ACCESS_KEY="your-aws-secret-key"
+   AWS_REGION="your-aws-region"
+   
+   # OpenAI Configuration (if using)
+   OPENAI_API_KEY="your-openai-api-key"
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. Initialize the database:
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-## Learn More
+   The application will be available at [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run dev` - Start the development server with Turbopack
+- `npm run build` - Build the application for production
+- `npm run start` - Start the production server
+- `npm run lint` - Run ESLint for code quality
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech Stack
 
-## Deploy on Vercel
+- **Framework**: Next.js 15
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Radix UI
+- **Database**: PostgreSQL with Prisma
+- **Authentication**: NextAuth.js
+- **Storage**: AWS S3
+- **Email**: Nodemailer
+- **State Management**: React Hooks
+- **Code Quality**: ESLint, Prettier
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `/src` - Application source code
+- `/public` - Static assets
+- `/prisma` - Database schema and migrations
+- `/components` - Reusable UI components
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is private and not open for public use without permission.
