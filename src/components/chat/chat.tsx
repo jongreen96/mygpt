@@ -6,7 +6,7 @@ import { deleteMessageAction } from '@/lib/actions';
 import React, { useEffect, useRef, useState } from 'react';
 
 import type { ModelSettingsType } from '@/lib/ai-models';
-import { defaultModelSettings, models, ModelKey } from '@/lib/ai-models';
+import { defaultModelSettings, models } from '@/lib/ai-models';
 import { Message, useChat } from 'ai/react';
 import { AlertCircle, ImagePlus, Loader2, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -79,10 +79,32 @@ export default function Chat({
     deleteMessageAction(messages[messages.length - 2].id);
   };
 
-  const customHandleSubmit = (e: React.FormEvent) => {
-    handleSubmit(e, {
-      experimental_attachments: files,
-    });
+  const customHandleSubmit = async (e: React.FormEvent) => {
+    switch (models[modelSettings.model as keyof typeof models].type) {
+      case 'chat':
+      case 'multimodal': {
+
+        handleSubmit(e, {
+          experimental_attachments: files,
+        });
+      }
+        break;
+      case 'image':
+      // TODO: Handle image response
+      // const imageResponse = await fetch('/api/image', {
+      //   method: 'POST',
+      //   body: JSON.stringify({
+      //     prompt: input,
+      //     modelSettings,
+      //   }),
+      // })
+
+      // setMessages([
+      //   ...messages,
+      //   imageResponse,
+      // ]);
+      // break;
+    }
 
     setFiles(undefined);
 
