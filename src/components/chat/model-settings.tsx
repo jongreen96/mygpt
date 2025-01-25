@@ -93,10 +93,10 @@ export default function ModelSettings({
             <div className='flex w-full flex-col gap-2'>
               {JSON.stringify(localSettings) !==
                 JSON.stringify(modelSettings) && (
-                <Button variant='outline' onClick={handleSaveDefault}>
-                  Set as Default
-                </Button>
-              )}
+                  <Button variant='outline' onClick={handleSaveDefault}>
+                    Set as Default
+                  </Button>
+                )}
               <DrawerClose asChild>
                 <Button>Save</Button>
               </DrawerClose>
@@ -129,10 +129,10 @@ export default function ModelSettings({
           <div className='flex w-full flex-col gap-2'>
             {JSON.stringify(localSettings) !==
               JSON.stringify(modelSettings) && (
-              <Button variant='outline' onClick={handleSaveDefault}>
-                Set as Default
-              </Button>
-            )}
+                <Button variant='outline' onClick={handleSaveDefault}>
+                  Set as Default
+                </Button>
+              )}
             <SheetClose asChild>
               <Button className='w-full'>Save</Button>
             </SheetClose>
@@ -169,28 +169,21 @@ function Settings({
             </SelectTrigger>
 
             <SelectContent>
-              {Object.entries(models).map((modelGroup) => {
-                return (
-                  <SelectGroup key={modelGroup[0]}>
-                    <SelectLabel className='bg-secondary/25'>
-                      {modelGroup[0]}
-                    </SelectLabel>
-                    {Object.entries(modelGroup[1]).map((model) => {
-                      return (
-                        <SelectItem key={model[0]} value={model[0]}>
-                          {model[0]}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectGroup>
-                );
-              })}
+              {
+                Object.entries(models).map(([key, value]) => {
+                  return (
+                    <SelectItem key={key} value={key}>
+                      {key}
+                    </SelectItem>
+                  );
+                })
+              }
             </SelectContent>
           </Select>
         </div>
         <p className='text-sm text-muted-foreground'>
           {
-            models.OpenAI[modelSettings.model as keyof typeof models.OpenAI]
+            models[modelSettings.model as keyof typeof models]
               .description
           }
         </p>

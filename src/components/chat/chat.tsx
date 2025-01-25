@@ -6,7 +6,7 @@ import { deleteMessageAction } from '@/lib/actions';
 import React, { useEffect, useRef, useState } from 'react';
 
 import type { ModelSettingsType } from '@/lib/ai-models';
-import { defaultModelSettings } from '@/lib/ai-models';
+import { defaultModelSettings, models, ModelKey } from '@/lib/ai-models';
 import { Message, useChat } from 'ai/react';
 import { AlertCircle, ImagePlus, Loader2, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -24,7 +24,7 @@ export default function Chat({
 }: {
   conversationId?: string;
   prevMessages?: Message[];
-  conversationSettings?: ModelSettingsType | undefined;
+  conversationSettings?: ModelSettingsType;
 }) {
   const router = useRouter();
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -125,20 +125,25 @@ export default function Chat({
           className='hidden'
         />
 
-        <Button
-          size='icon'
-          variant='outline'
-          type='button'
-          onClick={() => fileInputRef.current?.click()}
-          className='relative'
-        >
-          <ImagePlus className='scale-125' />
-          {files && files.length > 0 && (
-            <div className='absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground'>
-              {files.length}
-            </div>
-          )}
-        </Button>
+        {
+          models[modelSettings.model as keyof typeof models].type ===
+          'multimodal' && (
+            <Button
+              size='icon'
+              variant='outline'
+              type='button'
+              onClick={() => fileInputRef.current?.click()}
+              className='relative'
+            >
+              <ImagePlus className='scale-125' />
+              {files && files.length > 0 && (
+                <div className='absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground'>
+                  {files.length}
+                </div>
+              )}
+            </Button>
+          )
+        }
 
         <input
           className='grow rounded border border-gray-300 p-[5px] shadow-lg'
