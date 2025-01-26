@@ -37,6 +37,7 @@ export default function Chat({
     messages,
     setMessages,
     input,
+    setInput,
     handleInputChange,
     handleSubmit,
     isLoading,
@@ -57,6 +58,8 @@ export default function Chat({
       }
     },
   });
+
+  const [customIsLoading, setCustomIsLoading] = useState(isLoading);
 
   // Scroll to bottom on initial page load
   useEffect(() => {
@@ -80,30 +83,61 @@ export default function Chat({
   };
 
   const customHandleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     switch (models[modelSettings.model as keyof typeof models].type) {
       case 'chat':
-      case 'multimodal': {
-
-        handleSubmit(e, {
-          experimental_attachments: files,
-        });
-      }
+      case 'multimodal':
+        {
+          handleSubmit(e, {
+            experimental_attachments: files,
+          });
+        }
         break;
       case 'image':
-      // TODO: Handle image response
-      // const imageResponse = await fetch('/api/image', {
-      //   method: 'POST',
-      //   body: JSON.stringify({
-      //     prompt: input,
-      //     modelSettings,
-      //   }),
-      // })
+        setMessages([
+          ...messages,
+          {
+            id: 'loading',
+            content: input,
+            role: 'user',
+          },
+        ]);
+        setInput('');
+        setCustomIsLoading(true);
 
-      // setMessages([
-      //   ...messages,
-      //   imageResponse,
-      // ]);
-      // break;
+        const imageResponse = await fetch('/api/image', {
+          method: 'POST',
+          body: JSON.stringify({
+            prompt: { role: 'user', content: input },
+            conversationId,
+            modelSettings,
+          }),
+        });
+
+        const imageResponseJSON = (await imageResponse.json()) as {
+          conversationId: string;
+          message: Message;
+        };
+
+        const newConversationId = imageResponseJSON.conversationId;
+        if (conversationId !== newConversationId) {
+          router.push(`/chat/${newConversationId}`);
+          router.refresh();
+        }
+
+        setMessages([
+          ...messages,
+          {
+            id: 'loading',
+            content: input,
+            role: 'user',
+          },
+          imageResponseJSON.message,
+        ]);
+        setCustomIsLoading(false);
+
+        break;
     }
 
     setFiles(undefined);
@@ -130,10 +164,7 @@ export default function Chat({
 
       <ErrorMessage error={error} handleReload={handleReload} />
 
-      <form
-        onSubmit={customHandleSubmit}
-        className='fixed bottom-0 mb-8 flex w-[calc(100%-16px)] max-w-[752px] items-center gap-2'
-      >
+      <form className='fixed bottom-0 mb-8 flex w-[calc(100%-16px)] max-w-[752px] items-center gap-2'>
         <input
           type='file'
           accept='image/*'
@@ -147,25 +178,23 @@ export default function Chat({
           className='hidden'
         />
 
-        {
-          models[modelSettings.model as keyof typeof models].type ===
+        {models[modelSettings.model as keyof typeof models].type ===
           'multimodal' && (
-            <Button
-              size='icon'
-              variant='outline'
-              type='button'
-              onClick={() => fileInputRef.current?.click()}
-              className='relative'
-            >
-              <ImagePlus className='scale-125' />
-              {files && files.length > 0 && (
-                <div className='absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground'>
-                  {files.length}
-                </div>
-              )}
-            </Button>
-          )
-        }
+          <Button
+            size='icon'
+            variant='outline'
+            type='button'
+            onClick={() => fileInputRef.current?.click()}
+            className='relative'
+          >
+            <ImagePlus className='scale-125' />
+            {files && files.length > 0 && (
+              <div className='absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground'>
+                {files.length}
+              </div>
+            )}
+          </Button>
+        )}
 
         <input
           className='grow rounded border border-gray-300 p-[5px] shadow-lg'
@@ -184,6 +213,7 @@ export default function Chat({
 
         <SubmitButton
           isLoading={isLoading}
+          customIsLoading={customIsLoading}
           customHandleSubmit={customHandleSubmit}
         />
       </form>
@@ -193,15 +223,17 @@ export default function Chat({
 
 function SubmitButton({
   isLoading,
+  customIsLoading,
   customHandleSubmit,
 }: {
   isLoading: boolean;
+  customIsLoading: boolean;
   customHandleSubmit: (e: React.FormEvent) => void;
 }) {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      if (!isLoading) {
+      if (!customIsLoading || !isLoading) {
         customHandleSubmit(e as unknown as React.FormEvent);
       }
     }
@@ -211,12 +243,14 @@ function SubmitButton({
     <Button
       type='submit'
       size='icon'
-      aria-label={isLoading ? 'Sending message...' : 'Send message'}
-      disabled={isLoading}
+      aria-label={
+        customIsLoading || isLoading ? 'Sending message...' : 'Send message'
+      }
+      disabled={customIsLoading || isLoading}
       onClick={(e) => customHandleSubmit(e)}
       onKeyDown={handleKeyDown}
     >
-      {!isLoading ? (
+      {!customIsLoading && !isLoading ? (
         <Send className='scale-125' aria-hidden='true' />
       ) : (
         <Loader2 className='animate-spin' aria-hidden='true' />

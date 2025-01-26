@@ -58,7 +58,7 @@ export async function POST(req: Request) {
           saveMessages({
             conversationId,
             userMessage: messages[messages.length - 1],
-            assistantMessage: text,
+            assistantMessage: { content: text },
             usage,
           });
         },

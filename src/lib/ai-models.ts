@@ -91,7 +91,7 @@ export const models = {
       'DALL·E·3 is a AI system that can create realistic images and art from a description in natural language. DALL·E 3 currently supports the ability, given a prompt, to create a new image with a specific size.',
     inputCost: 0,
     outputCost: 0.12,
-  }
+  },
 };
 
 export const defaultModelSettings = {

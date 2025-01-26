@@ -140,7 +140,10 @@ export async function saveMessages({
 }: {
   conversationId: string;
   userMessage: Message;
-  assistantMessage: string;
+  assistantMessage: {
+    content: string | undefined;
+    experimental_attachments?: Attachment[];
+  };
   usage: {
     promptTokens: number;
     completionTokens: number;
@@ -160,7 +163,12 @@ export async function saveMessages({
       },
       {
         conversationId,
-        content: assistantMessage,
+        content: assistantMessage.content,
+        experimental_attachments: assistantMessage.experimental_attachments
+          ? JSON.parse(
+              JSON.stringify(assistantMessage.experimental_attachments),
+            )
+          : undefined,
         role: 'assistant',
         tokens: usage.completionTokens,
       },
