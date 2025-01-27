@@ -32,9 +32,7 @@ import { Input } from '../ui/input';
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
@@ -93,10 +91,10 @@ export default function ModelSettings({
             <div className='flex w-full flex-col gap-2'>
               {JSON.stringify(localSettings) !==
                 JSON.stringify(modelSettings) && (
-                  <Button variant='outline' onClick={handleSaveDefault}>
-                    Set as Default
-                  </Button>
-                )}
+                <Button variant='outline' onClick={handleSaveDefault}>
+                  Set as Default
+                </Button>
+              )}
               <DrawerClose asChild>
                 <Button>Save</Button>
               </DrawerClose>
@@ -129,10 +127,10 @@ export default function ModelSettings({
           <div className='flex w-full flex-col gap-2'>
             {JSON.stringify(localSettings) !==
               JSON.stringify(modelSettings) && (
-                <Button variant='outline' onClick={handleSaveDefault}>
-                  Set as Default
-                </Button>
-              )}
+              <Button variant='outline' onClick={handleSaveDefault}>
+                Set as Default
+              </Button>
+            )}
             <SheetClose asChild>
               <Button className='w-full'>Save</Button>
             </SheetClose>
@@ -169,23 +167,18 @@ function Settings({
             </SelectTrigger>
 
             <SelectContent>
-              {
-                Object.entries(models).map(([key, value]) => {
-                  return (
-                    <SelectItem key={key} value={key}>
-                      {key}
-                    </SelectItem>
-                  );
-                })
-              }
+              {Object.entries(models).map(([key]) => {
+                return (
+                  <SelectItem key={key} value={key}>
+                    {key}
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
         </div>
         <p className='text-sm text-muted-foreground'>
-          {
-            models[modelSettings.model as keyof typeof models]
-              .description
-          }
+          {models[modelSettings.model as keyof typeof models].description}
         </p>
       </div>
 
