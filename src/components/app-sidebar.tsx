@@ -14,7 +14,13 @@ import {
 import { ModelSettingsType } from '@/lib/ai-models';
 import { deleteConversation, getConversations } from '@/lib/db';
 import getSession from '@/lib/hooks/get-session';
-import { MessageSquare, MoreHorizontalIcon, SquarePen } from 'lucide-react';
+import { formatCredits } from '@/lib/utils';
+import {
+  MessageSquare,
+  MoreHorizontalIcon,
+  Plus,
+  SquarePen,
+} from 'lucide-react';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 import {
@@ -91,6 +97,26 @@ export async function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
+        <Separator />
+
+        <div className='flex items-center justify-between'>
+          <p className='text-sm'>
+            Credits:{' '}
+            <span className='text-base font-bold'>
+              {formatCredits(session?.user?.credits)}
+            </span>
+          </p>
+
+          <Button asChild variant='ghost'>
+            <Link href='/chat/pricing'>
+              <Plus />
+              Add credits
+            </Link>
+          </Button>
+        </div>
+
+        <Separator />
+
         <div className='flex items-center justify-between'>
           <UserAvatar
             userName={session.user?.name}

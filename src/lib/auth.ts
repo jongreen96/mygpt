@@ -1,8 +1,16 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import NextAuth from 'next-auth';
+import NextAuth, { type DefaultSession } from 'next-auth';
 import Google from 'next-auth/providers/google';
 import Nodemailer from 'next-auth/providers/nodemailer';
 import prisma from './db';
+
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      credits: number;
+    } & DefaultSession['user'];
+  }
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -27,4 +35,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: '/login',
   },
   trustHost: true,
+  callbacks: {
+    session({ session, user }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          // @ts-expect-error - It's fine dont worry about it, you shouldn't even be reading this code anyway.
+          credits: user.credits,
+        },
+      };
+    },
+  },
 });

@@ -195,3 +195,16 @@ export async function deleteMessage(
     });
   }
 }
+
+export async function addCredits(userId: string, credits: number) {
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      credits: {
+        increment: credits,
+      },
+    },
+  });
+}

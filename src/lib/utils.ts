@@ -27,3 +27,11 @@ export function useIsMobile() {
 
   return !!isMobile;
 }
+
+// Formats user credits into currency
+export function formatCredits(credits: number) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(credits / 100000);
+}
