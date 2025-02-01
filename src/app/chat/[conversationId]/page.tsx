@@ -1,4 +1,5 @@
 import Chat from '@/components/chat/chat';
+import { ModelListType } from '@/lib/ai-models';
 import { getConversation } from '@/lib/db';
 import getSession from '@/lib/hooks/get-session';
 import { redirect } from 'next/navigation';
@@ -20,7 +21,7 @@ export default async function ConversationPage({
     <Chat
       conversationId={conversation.id}
       prevMessages={conversation.Message}
-      conversationSettings={JSON.parse(conversation.settings || 'null')}
+      model={conversation.model as ModelListType}
     />
   );
 }

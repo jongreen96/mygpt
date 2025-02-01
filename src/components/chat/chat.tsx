@@ -5,33 +5,25 @@ import MessageBubble from '@/components/ui/message-bubble';
 import { deleteMessageAction } from '@/lib/actions';
 import React, { useEffect, useRef, useState } from 'react';
 
-import type { ModelSettingsType } from '@/lib/ai-models';
-import { defaultModelSettings, models } from '@/lib/ai-models';
+import { defaultChatModel, ModelListType, models } from '@/lib/ai-models';
 import { Message, useChat } from 'ai/react';
 import { AlertCircle, ImagePlus, Loader2, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import ModelSettings from './model-settings';
 
-const localSettings =
-  typeof window !== 'undefined'
-    ? JSON.parse(localStorage.getItem('conversationSettings') || 'null')
-    : (undefined as ModelSettingsType | undefined);
-
 export default function Chat({
   conversationId,
   prevMessages,
-  conversationSettings = localSettings,
+  model = defaultChatModel,
 }: {
   conversationId?: string;
   prevMessages?: Message[];
-  conversationSettings?: ModelSettingsType;
+  model?: ModelListType;
 }) {
   const router = useRouter();
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const [modelSettings, setModelSettings] = useState(
-    conversationSettings || defaultModelSettings,
-  );
+  const [selectedModel, setSelectedModel] = useState(model);
 
   const {
     messages,
@@ -47,7 +39,7 @@ export default function Chat({
     initialMessages: prevMessages,
     body: {
       conversationId,
-      modelSettings,
+      model: selectedModel,
     },
     onFinish(e) {
       // @ts-expect-error - conversationId is not on Message type
@@ -85,7 +77,7 @@ export default function Chat({
   const customHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    switch (models[modelSettings.model as keyof typeof models].type) {
+    switch (models[selectedModel as keyof typeof models].type) {
       case 'chat':
       case 'multimodal':
         {
@@ -111,7 +103,7 @@ export default function Chat({
           body: JSON.stringify({
             prompt: { role: 'user', content: input },
             conversationId,
-            modelSettings,
+            selectedModel,
           }),
         });
 
@@ -178,8 +170,7 @@ export default function Chat({
           className='hidden'
         />
 
-        {models[modelSettings.model as keyof typeof models].type ===
-          'multimodal' && (
+        {models[selectedModel as keyof typeof models].type === 'multimodal' && (
           <Button
             size='icon'
             variant='outline'
@@ -206,8 +197,8 @@ export default function Chat({
 
         {!conversationId && (
           <ModelSettings
-            modelSettings={modelSettings}
-            setModelSettings={setModelSettings}
+            selectedModel={selectedModel}
+            setSelectedModel={setSelectedModel}
           />
         )}
 

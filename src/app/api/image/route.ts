@@ -2,7 +2,7 @@ import { auth } from '@/lib/auth';
 import { createConversation, saveMessages } from '@/lib/db';
 import { openai } from '@ai-sdk/openai';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { experimental_generateImage } from 'ai';
+import { experimental_generateImage as generateImage } from 'ai';
 import { nanoid } from 'nanoid';
 
 const client = new S3Client({
@@ -20,18 +20,20 @@ export async function POST(req: Request) {
   if (typeof session?.user?.id === 'undefined') return;
 
   // eslint-disable-next-line prefer-const
-  let { prompt, conversationId, modelSettings } = await req.json();
+  let { prompt, conversationId, model } = await req.json();
 
   if (!conversationId)
     conversationId = await createConversation({
       userId: session?.user?.id,
       messages: [prompt],
-      modelSettings,
+      model,
     });
 
-  const { image } = await experimental_generateImage({
-    model: openai.image(modelSettings.model),
+  // TODO: Fix whatever the fuck is going wrong here
+  const { image } = await generateImage({
+    model: openai.image(model),
     prompt: prompt.content,
+    size: '1024x1024',
   });
 
   const Key = `ai-images/${conversationId}/${nanoid()}`;

@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { Attachment, Message } from 'ai';
-import { ModelSettingsType } from './ai-models';
 import generateSubject from './hooks/generate-subject';
 
 const prismaClientSingleton = () => {
@@ -21,11 +20,11 @@ if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma;
 export async function createConversation({
   userId,
   messages,
-  modelSettings,
+  model,
 }: {
   userId: string;
   messages: { role: string; content: string }[];
-  modelSettings: ModelSettingsType;
+  model: string;
 }) {
   const subject = await generateSubject(messages);
 
@@ -33,7 +32,7 @@ export async function createConversation({
     data: {
       userId,
       subject: subject,
-      settings: JSON.stringify(modelSettings),
+      model,
     },
     select: {
       id: true,
@@ -77,7 +76,7 @@ export async function getConversation(
     select: {
       id: true,
       subject: true,
-      settings: true,
+      model: true,
       Message: {
         select: {
           id: true,
@@ -122,7 +121,7 @@ export async function getConversations(userId: string) {
     select: {
       id: true,
       subject: true,
-      settings: true,
+      model: true,
     },
     orderBy: {
       createdAt: 'desc',

@@ -11,7 +11,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { ModelSettingsType } from '@/lib/ai-models';
 import { deleteConversation, getConversations } from '@/lib/db';
 import getSession from '@/lib/hooks/get-session';
 import { formatCredits } from '@/lib/utils';
@@ -136,7 +135,7 @@ function ConversationDropdownMenu({
   conversation: {
     id: string;
     subject: string;
-    settings: string;
+    model: string;
   };
 }) {
   return (
@@ -148,7 +147,7 @@ function ConversationDropdownMenu({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className='w-min'>
-        <ConversationInformation settings={conversation.settings} />
+        <ConversationInformation model={conversation.model} />
 
         <ConversationDelete id={conversation.id} />
       </DropdownMenuContent>
@@ -156,9 +155,7 @@ function ConversationDropdownMenu({
   );
 }
 
-function ConversationInformation({ settings }: { settings: string }) {
-  const conversationSettings = JSON.parse(settings) as ModelSettingsType;
-
+function ConversationInformation({ model }: { model: string }) {
   return (
     <DropdownMenuItem asChild>
       <Dialog>
@@ -175,17 +172,10 @@ function ConversationInformation({ settings }: { settings: string }) {
 
           <Table>
             <TableBody>
-              {Object.entries(conversationSettings)
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                .filter(([_, value]) => value !== null)
-                .map(([key, value]) => (
-                  <TableRow key={key}>
-                    <TableCell className='font-medium capitalize'>
-                      {key}
-                    </TableCell>
-                    <TableCell>{value}</TableCell>
-                  </TableRow>
-                ))}
+              <TableRow>
+                <TableCell>Model</TableCell>
+                <TableCell>{model}</TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </DialogContent>
