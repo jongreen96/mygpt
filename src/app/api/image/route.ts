@@ -33,6 +33,12 @@ export async function POST(req: Request) {
     model: openai.image(model),
     prompt: prompt.content,
     size: '1024x1024',
+    providerOptions: {
+      openai: {
+        style: 'vivid',
+        quality: 'hd',
+      },
+    },
   });
 
   const Key = `ai-images/${conversationId}/${nanoid()}`;
