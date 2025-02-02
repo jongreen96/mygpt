@@ -156,63 +156,104 @@ export default function Chat({
 
       <ErrorMessage error={error} handleReload={handleReload} />
 
-      <form className='fixed bottom-0 flex w-[calc(100%-16px)] max-w-[752px] flex-col items-center gap-2 rounded-t-lg bg-sidebar/80 p-2 backdrop-blur-sm'>
+      <ChatInput
+        fileInputRef={fileInputRef}
+        files={files}
+        setFiles={setFiles}
+        input={input}
+        handleInputChange={handleInputChange}
+        isLoading={isLoading}
+        customIsLoading={customIsLoading}
+        customHandleSubmit={customHandleSubmit}
+        selectedModel={selectedModel}
+        setSelectedModel={setSelectedModel}
+        conversationId={conversationId}
+      />
+    </div>
+  );
+}
+
+function ChatInput({
+  fileInputRef,
+  files,
+  setFiles,
+  input,
+  handleInputChange,
+  isLoading,
+  customIsLoading,
+  customHandleSubmit,
+  selectedModel,
+  setSelectedModel,
+  conversationId,
+}: {
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
+  files: FileList | undefined;
+  setFiles: React.Dispatch<React.SetStateAction<FileList | undefined>>;
+  input: string;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isLoading: boolean;
+  customIsLoading: boolean;
+  customHandleSubmit: (e: React.FormEvent) => void;
+  selectedModel: ModelListType;
+  setSelectedModel: React.Dispatch<React.SetStateAction<ModelListType>>;
+  conversationId: string | undefined;
+}) {
+  return (
+    <form className='fixed bottom-0 flex w-[calc(100%-16px)] max-w-[752px] flex-col items-center gap-2 rounded-t-lg bg-sidebar/80 p-2 backdrop-blur-sm'>
+      <input
+        type='file'
+        accept='image/*'
+        onChange={(event) => {
+          if (event.target.files) {
+            setFiles(event.target.files);
+          }
+        }}
+        multiple
+        ref={fileInputRef}
+        className='hidden'
+      />
+
+      <div className='flex w-full gap-2'>
         <input
-          type='file'
-          accept='image/*'
-          onChange={(event) => {
-            if (event.target.files) {
-              setFiles(event.target.files);
-            }
-          }}
-          multiple
-          ref={fileInputRef}
-          className='hidden'
+          className='grow rounded border border-gray-300 p-[5px] shadow-lg'
+          value={input}
+          placeholder='Say something...'
+          onChange={handleInputChange}
+          autoFocus
         />
 
-        <div className='flex w-full gap-2'>
-          <input
-            className='grow rounded border border-gray-300 p-[5px] shadow-lg'
-            value={input}
-            placeholder='Say something...'
-            onChange={handleInputChange}
-            autoFocus
-          />
+        <SubmitButton
+          isLoading={isLoading}
+          customIsLoading={customIsLoading}
+          customHandleSubmit={customHandleSubmit}
+        />
+      </div>
 
-          <SubmitButton
-            isLoading={isLoading}
-            customIsLoading={customIsLoading}
-            customHandleSubmit={customHandleSubmit}
-          />
-        </div>
+      <div className='flex w-full items-center justify-between'>
+        <ModelSettings
+          selectedModel={selectedModel}
+          setSelectedModel={setSelectedModel}
+          conversationId={conversationId}
+        />
 
-        <div className='flex w-full items-center justify-between'>
-          <ModelSettings
-            selectedModel={selectedModel}
-            setSelectedModel={setSelectedModel}
-            conversationId={conversationId}
-          />
-
-          {models[selectedModel as keyof typeof models].type ===
-            'multimodal' && (
-            <Button
-              size='icon'
-              variant='ghost'
-              type='button'
-              onClick={() => fileInputRef.current?.click()}
-              className='size-6'
-            >
-              <ImagePlus />
-              {files && files.length > 0 && (
-                <div className='absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground'>
-                  {files.length}
-                </div>
-              )}
-            </Button>
-          )}
-        </div>
-      </form>
-    </div>
+        {models[selectedModel as keyof typeof models].type === 'multimodal' && (
+          <Button
+            size='icon'
+            variant='ghost'
+            type='button'
+            onClick={() => fileInputRef.current?.click()}
+            className='size-6'
+          >
+            <ImagePlus />
+            {files && files.length > 0 && (
+              <div className='absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground'>
+                {files.length}
+              </div>
+            )}
+          </Button>
+        )}
+      </div>
+    </form>
   );
 }
 
