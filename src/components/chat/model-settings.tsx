@@ -2,7 +2,7 @@
 
 import { ModelListType, models } from '@/lib/ai-models';
 import { useIsMobile } from '@/lib/utils';
-import { Settings2 } from 'lucide-react';
+import { SettingsIcon } from 'lucide-react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Button } from '../ui/button';
 import {
@@ -34,19 +34,31 @@ import {
 export default function ModelSettings({
   selectedModel,
   setSelectedModel,
+  conversationId,
 }: {
   selectedModel: ModelListType;
   setSelectedModel: Dispatch<SetStateAction<ModelListType>>;
+  conversationId?: string;
 }) {
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
+
+  if (conversationId)
+    return (
+      <Button variant='ghost' size='sm' className='h-6 p-0' disabled>
+        <span className='font-semibold'>Model:</span> {selectedModel}
+      </Button>
+    );
 
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
-          <Button variant='secondary' size='icon'>
-            <Settings2 className='scale-125' />
+          <Button variant='ghost' size='sm' className='h-6 p-0'>
+            <span className='font-semibold'>Model:</span> {selectedModel}
+            <span className='rounded bg-card p-1'>
+              <SettingsIcon />
+            </span>
           </Button>
         </DrawerTrigger>
 
@@ -77,8 +89,11 @@ export default function ModelSettings({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant='secondary' size='icon'>
-          <Settings2 className='scale-125' />
+        <Button variant='ghost' size='sm' className='h-6 p-0'>
+          <span className='font-semibold'>Model:</span> {selectedModel}
+          <span className='rounded bg-card p-1'>
+            <SettingsIcon />
+          </span>
         </Button>
       </SheetTrigger>
 
