@@ -103,7 +103,7 @@ export default function Chat({
           body: JSON.stringify({
             prompt: { role: 'user', content: input },
             conversationId,
-            selectedModel,
+            model: selectedModel,
           }),
         });
 

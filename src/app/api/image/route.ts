@@ -29,7 +29,6 @@ export async function POST(req: Request) {
       model,
     });
 
-  // TODO: Fix whatever the fuck is going wrong here
   const { image } = await generateImage({
     model: openai.image(model),
     prompt: prompt.content,
