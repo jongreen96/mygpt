@@ -1,6 +1,6 @@
-import { ModelListType } from '@/lib/ai-models';
+import { ModelListType, models } from '@/lib/ai-models';
 import { auth } from '@/lib/auth';
-import { createConversation, saveMessages } from '@/lib/db';
+import { chargeUser, createConversation, saveMessages } from '@/lib/db';
 import { openai } from '@ai-sdk/openai';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { createDataStreamResponse, Message, streamText } from 'ai';
@@ -28,6 +28,9 @@ export async function POST(req: Request) {
     model: ModelListType;
   };
 
+  if (session.user.credits < 0)
+    return Response.json({ error: 'Insufficient credits' }, { status: 402 });
+
   if (!conversationId)
     conversationId = await createConversation({
       userId: session?.user?.id,
@@ -53,6 +56,13 @@ export async function POST(req: Request) {
             userMessage: messages[messages.length - 1],
             assistantMessage: { content: text },
             usage,
+          });
+
+          chargeUser({
+            userId: session.user.id!,
+            cost:
+              (models[model].inputCost / 1000000) * usage.promptTokens +
+              (models[model].outputCost / 1000000) * usage.completionTokens,
           });
         },
       });

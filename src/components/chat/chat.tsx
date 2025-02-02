@@ -58,6 +58,11 @@ export default function Chat({
     bottomRef.current?.scrollIntoView();
   }, []);
 
+  useEffect(() => {
+    if (error?.message.includes('Insufficient credits'))
+      router.push('/chat/pricing');
+  }, [error, router]);
+
   const handleDelete = (id: string) => {
     setMessages(messages.filter((message) => message.id !== id));
     const deleteConversation =
