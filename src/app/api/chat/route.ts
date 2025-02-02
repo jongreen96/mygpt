@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     model: ModelListType;
   };
 
-  if (session.user.credits < 0)
+  if (session.user.credits <= 0)
     return Response.json({ error: 'Insufficient credits' }, { status: 402 });
 
   if (!conversationId)
