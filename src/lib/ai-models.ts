@@ -73,7 +73,7 @@ export const models = {
     description:
       'DALL·E·2 is a AI system that can create images and art from a description in natural language. DALL·E 2 currently supports the ability, given a prompt, to create a new image with a specific size.',
     inputCost: 0,
-    outputCost: 0.08,
+    outputCost: 0.02,
   },
   'dall-e-3': {
     company: 'OpenAI',
@@ -81,7 +81,7 @@ export const models = {
     description:
       'DALL·E·3 is a AI system that can create realistic images and art from a description in natural language. DALL·E 3 currently supports the ability, given a prompt, to create a new image with a specific size.',
     inputCost: 0,
-    outputCost: 0.12,
+    outputCost: 0.08,
   },
 };
 
