@@ -46,8 +46,8 @@ export default function Chat({
       const newConversationId = e.annotations[0].conversationId;
       if (conversationId !== newConversationId) {
         router.push(`/chat/${newConversationId}`);
-        router.refresh();
       }
+      router.refresh();
     },
   });
 
