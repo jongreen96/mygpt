@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { CopyIcon } from 'lucide-react';
+import { Components } from 'react-markdown';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { stackoverflowDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { toast } from 'sonner';
@@ -164,10 +165,10 @@ export function Pre({
 interface CodeProps {
   inline?: boolean;
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-export const markdownComponents = {
+export const markdownComponents: Components = {
   code({ inline, className, children, ...props }: CodeProps) {
     const match = /language-(\w+)/.exec(className || '');
     return !inline && match ? (
