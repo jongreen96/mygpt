@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/sidebar';
 import { deleteConversation, getConversations } from '@/lib/db';
 import getSession from '@/lib/hooks/get-session';
-import { formatCredits } from '@/lib/utils';
+import { cn, formatCredits } from '@/lib/utils';
 import {
   MessageSquare,
   MoreHorizontalIcon,
@@ -99,9 +99,14 @@ export async function AppSidebar() {
         <Separator />
 
         <div className='flex items-center justify-between'>
-          <p className='text-sm'>
+          <p className='select-none text-sm'>
             Credits:{' '}
-            <span className='text-base font-bold'>
+            <span
+              className={cn(
+                'text-base font-bold',
+                session.user.credits < 0 && 'text-destructive',
+              )}
+            >
               {formatCredits(session?.user?.credits)}
             </span>
           </p>
