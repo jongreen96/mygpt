@@ -30,8 +30,9 @@ export function useIsMobile() {
 
 // Formats user credits into currency
 export function formatCredits(credits: number) {
+  const abs = Math.max(0, credits);
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-  }).format(credits / 100000);
+  }).format(abs / 100000);
 }
