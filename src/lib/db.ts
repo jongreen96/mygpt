@@ -207,3 +207,22 @@ export async function addCredits(userId: string, credits: number) {
     },
   });
 }
+
+export async function chargeUser({
+  userId,
+  cost,
+}: {
+  userId: string;
+  cost: number;
+}) {
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      credits: {
+        decrement: cost * 100000,
+      },
+    },
+  });
+}

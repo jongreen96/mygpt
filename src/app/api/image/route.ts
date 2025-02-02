@@ -1,8 +1,9 @@
+import { ModelListType, models } from '@/lib/ai-models';
 import { auth } from '@/lib/auth';
-import { createConversation, saveMessages } from '@/lib/db';
+import { chargeUser, createConversation, saveMessages } from '@/lib/db';
 import { openai } from '@ai-sdk/openai';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { experimental_generateImage as generateImage } from 'ai';
+import { experimental_generateImage as generateImage, Message } from 'ai';
 import { nanoid } from 'nanoid';
 
 const client = new S3Client({
@@ -20,7 +21,14 @@ export async function POST(req: Request) {
   if (typeof session?.user?.id === 'undefined') return;
 
   // eslint-disable-next-line prefer-const
-  let { prompt, conversationId, model } = await req.json();
+  let { prompt, conversationId, model } = (await req.json()) as {
+    prompt: Message;
+    conversationId?: string;
+    model: ModelListType;
+  };
+
+  if (session.user.credits < models[model].outputCost * 100000)
+    return Response.json({ error: 'Insufficient credits' }, { status: 402 });
 
   if (!conversationId)
     conversationId = await createConversation({
@@ -50,6 +58,11 @@ export async function POST(req: Request) {
   });
 
   await client.send(command);
+
+  await chargeUser({
+    userId: session.user.id,
+    cost: models[model].outputCost,
+  });
 
   const responseMessage = {
     content: undefined,

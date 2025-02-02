@@ -107,6 +107,11 @@ export default function Chat({
           }),
         });
 
+        if (imageResponse.status !== 200) {
+          router.push('/chat/pricing');
+          return;
+        }
+
         const imageResponseJSON = (await imageResponse.json()) as {
           conversationId: string;
           message: Message;
@@ -117,6 +122,9 @@ export default function Chat({
           router.push(`/chat/${newConversationId}`);
           router.refresh();
         }
+
+        // Refresh page to update credits
+        router.refresh();
 
         setMessages([
           ...messages,
