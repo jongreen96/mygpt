@@ -14,7 +14,7 @@ import ModelSettings from './model-settings';
 export default function Chat({
   conversationId,
   prevMessages,
-  model = defaultChatModel,
+  model,
 }: {
   conversationId?: string;
   prevMessages?: Message[];
@@ -23,7 +23,11 @@ export default function Chat({
   const router = useRouter();
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const [selectedModel, setSelectedModel] = useState(model);
+  const [selectedModel, setSelectedModel] = useState(
+    model ||
+      (localStorage.getItem('model') as ModelListType) ||
+      defaultChatModel,
+  );
 
   const {
     messages,

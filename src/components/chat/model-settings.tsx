@@ -43,6 +43,8 @@ export default function ModelSettings({
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
 
+  const userPreferedModel = localStorage.getItem('model') as ModelListType;
+
   if (conversationId)
     return (
       <Button variant='ghost' size='sm' className='h-6 p-0' disabled>
@@ -76,6 +78,10 @@ export default function ModelSettings({
 
           <DrawerFooter className='pt-2'>
             <div className='flex w-full flex-col gap-2'>
+              <SaveDefaultButton
+                userPreferedModel={userPreferedModel}
+                selectedModel={selectedModel}
+              />
               <DrawerClose asChild>
                 <Button>Close</Button>
               </DrawerClose>
@@ -109,6 +115,10 @@ export default function ModelSettings({
 
         <SheetFooter className='pt-2'>
           <div className='flex w-full flex-col gap-2'>
+            <SaveDefaultButton
+              userPreferedModel={userPreferedModel}
+              selectedModel={selectedModel}
+            />
             <SheetClose asChild>
               <Button className='w-full'>Close</Button>
             </SheetClose>
@@ -155,5 +165,30 @@ function Settings({
         </p>
       </div>
     </section>
+  );
+}
+
+function SaveDefaultButton({
+  userPreferedModel,
+  selectedModel,
+}: {
+  userPreferedModel: ModelListType | null;
+  selectedModel: ModelListType;
+}) {
+  const [currentPreferred, setCurrentPreferred] = useState(userPreferedModel);
+
+  if (currentPreferred === selectedModel) return null;
+
+  return (
+    <Button
+      variant='secondary'
+      onClick={() => {
+        localStorage.setItem('model', selectedModel);
+        setCurrentPreferred(selectedModel);
+      }}
+      className='w-full'
+    >
+      Set as default model
+    </Button>
   );
 }
