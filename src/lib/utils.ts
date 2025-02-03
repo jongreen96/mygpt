@@ -28,10 +28,11 @@ export function useIsMobile() {
   return !!isMobile;
 }
 
-// Formats user credits into currency
+// Formats user credits into number
 export function formatCredits(credits: number) {
   return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(credits / 100000);
 }
