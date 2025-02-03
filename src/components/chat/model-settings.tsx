@@ -56,7 +56,7 @@ export default function ModelSettings({
         <DrawerTrigger asChild>
           <Button variant='ghost' size='sm' className='h-6 p-0'>
             <span className='font-semibold'>Model:</span> {selectedModel}
-            <span className='rounded bg-card p-1'>
+            <span>
               <SettingsIcon />
             </span>
           </Button>
@@ -91,7 +91,7 @@ export default function ModelSettings({
       <SheetTrigger asChild>
         <Button variant='ghost' size='sm' className='h-6 p-0'>
           <span className='font-semibold'>Model:</span> {selectedModel}
-          <span className='rounded bg-card p-1'>
+          <span>
             <SettingsIcon />
           </span>
         </Button>
