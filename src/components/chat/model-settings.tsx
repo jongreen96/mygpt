@@ -181,7 +181,7 @@ function SaveDefaultButton({
 
   return (
     <Button
-      variant='secondary'
+      variant='outline'
       onClick={() => {
         localStorage.setItem('model', selectedModel);
         setCurrentPreferred(selectedModel);
