@@ -63,7 +63,7 @@ export default function PricingPage() {
               step={MIN}
             />
             <Input
-              value={newCredits}
+              value={`$ ${newCredits}`}
               onChange={(e) =>
                 setNewCredits(Math.max(MIN, Math.min(MAX, +e.target.value)))
               }
