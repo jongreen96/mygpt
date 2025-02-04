@@ -108,10 +108,10 @@ model Message {
 }
 
 model Transactions {
-  id     String @id @default(uuid())
-  userId String
-  amount Float
-  user   User   @relation(fields: [userId], references: [id], onDelete: NoAction)
+  id               String @id @default(uuid())
+  userId           String
+  pricePaidInCents Float
+  user             User   @relation(fields: [userId], references: [id], onDelete: NoAction)
 
   createdAt DateTime @default(now())
 }

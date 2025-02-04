@@ -227,11 +227,11 @@ export async function chargeUser({
   });
 }
 
-export async function logTransaction(userId: string, amount: number) {
+export async function logTransaction(userId: string, pricePaidInCents: number) {
   await prisma.transactions.create({
     data: {
       userId,
-      amount,
+      pricePaidInCents,
     },
   });
 }
