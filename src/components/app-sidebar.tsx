@@ -161,6 +161,7 @@ function ConversationDropdownMenu({
 }
 
 function ConversationInformation({ model }: { model: string }) {
+  // TODO: Finish implementation
   return (
     <DropdownMenuItem asChild>
       <Dialog>
