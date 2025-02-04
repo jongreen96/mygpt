@@ -1,3 +1,5 @@
+'use client';
+
 import { H3 } from '@/components/typography';
 import { buttonVariants } from '@/components/ui/button';
 import {
@@ -29,7 +31,14 @@ export default function SuccessPage() {
           <div className='flex items-center justify-center gap-2 rounded border border-dashed p-2'>
             <AlertCircle className='size-4' />
             <p className='text-sm'>
-              If you don&apos;t see your new credits, please reload the page
+              If you don&apos;t see your new credits, please
+              <button
+                onClick={() => window.location.reload()}
+                className='px-1 text-primary underline hover:no-underline'
+              >
+                reload
+              </button>
+              the page
             </p>
           </div>
 
