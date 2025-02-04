@@ -47,5 +47,6 @@ async function fulfillOrder(session: Stripe.Checkout.Session) {
   };
   if (!userId || !pricePaid) throw new Error('Missing userId or pricePaid');
 
+  // TODO: Add transaction table to db
   await addCredits(userId, pricePaid * 1000);
 }

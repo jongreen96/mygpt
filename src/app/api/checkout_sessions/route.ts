@@ -1,17 +1,26 @@
 import { auth } from '@/lib/auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export async function POST() {
+export async function POST(req: NextRequest) {
   const userSession = await auth();
+
+  let { amount } = await req.json();
+  amount = Math.max(5, Math.min(100, amount));
 
   try {
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
-          price: 'price_1QoVPyAsd3QgDZ8tG9KZsoa4',
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Credits Purchase',
+            },
+            unit_amount: amount * 100, // convert dollars to cents
+          },
           quantity: 1,
         },
       ],
