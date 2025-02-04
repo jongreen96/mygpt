@@ -1,4 +1,4 @@
-import { addCredits } from '@/lib/db';
+import { addCredits, logTransaction } from '@/lib/db';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
 
@@ -47,6 +47,6 @@ async function fulfillOrder(session: Stripe.Checkout.Session) {
   };
   if (!userId || !pricePaid) throw new Error('Missing userId or pricePaid');
 
-  // TODO: Add transaction table to db
   await addCredits(userId, pricePaid * 1000);
+  await logTransaction(userId, pricePaid);
 }
