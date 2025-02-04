@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       model,
     });
 
-  await processAttachments(messages, conversationId);
+  await processAttachments(messages, session.user.id);
 
   return createDataStreamResponse({
     execute: (dataStream) => {
@@ -75,14 +75,14 @@ export async function POST(req: Request) {
   });
 }
 
-async function processAttachments(messages: Message[], conversationId: string) {
+async function processAttachments(messages: Message[], userId: string) {
   const lastMessage = messages[messages.length - 1];
   if (!lastMessage?.experimental_attachments) return;
 
   for (const attachment of lastMessage.experimental_attachments) {
     const command = new PutObjectCommand({
       Bucket: process.env.CLOUDFLARE_BUCKET_NAME!,
-      Key: `user-images/${conversationId}/${attachment.name}`,
+      Key: `user-images/${userId}/${attachment.name}`,
       ContentType: attachment.contentType,
       Body: Buffer.from(attachment.url.split(',')[1], 'base64'),
     });
@@ -90,6 +90,6 @@ async function processAttachments(messages: Message[], conversationId: string) {
     await client.send(command);
 
     // TODO: IMPORTANT! Swap from dev url before release
-    attachment.url = `${process.env.CLOUDFLARE_DEV_URL!}/user-images/${conversationId}/${attachment.name}`;
+    attachment.url = `${process.env.CLOUDFLARE_DEV_URL!}/user-images/${userId}/${attachment.name}`;
   }
 }

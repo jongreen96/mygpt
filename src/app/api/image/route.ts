@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     },
   });
 
-  const Key = `ai-images/${conversationId}/${nanoid()}`;
+  const Key = `ai-images/${nanoid()}`;
   const command = new PutObjectCommand({
     Bucket: process.env.CLOUDFLARE_BUCKET_NAME!,
     Key,
