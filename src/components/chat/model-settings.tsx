@@ -3,7 +3,7 @@
 import { ModelListType, models } from '@/lib/ai-models';
 import { useIsMobile } from '@/lib/utils';
 import { SettingsIcon } from 'lucide-react';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import {
   Drawer,
@@ -43,7 +43,14 @@ export default function ModelSettings({
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
 
-  const userPreferedModel = localStorage.getItem('model') as ModelListType;
+  const [userPreferedModel, setUserPreferedModel] =
+    useState<ModelListType | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setUserPreferedModel(localStorage.getItem('model') as ModelListType);
+    }
+  }, []);
 
   if (conversationId)
     return (

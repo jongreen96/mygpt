@@ -23,11 +23,14 @@ export default function Chat({
   const router = useRouter();
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const [selectedModel, setSelectedModel] = useState(
-    model ||
-      (localStorage.getItem('model') as ModelListType) ||
-      defaultChatModel,
-  );
+  const [selectedModel, setSelectedModel] = useState(model || defaultChatModel);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedModel = localStorage.getItem('model') as ModelListType;
+      if (storedModel) setSelectedModel(storedModel);
+    }
+  }, []);
 
   const {
     messages,
