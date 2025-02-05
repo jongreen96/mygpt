@@ -223,7 +223,7 @@ export async function chargeUser({
     },
     data: {
       credits: {
-        decrement: Math.ceil(cost * profit * 100000),
+        decrement: Math.ceil(cost * profit * 100_000),
       },
     },
   });

@@ -61,8 +61,8 @@ export async function POST(req: Request) {
           chargeUser({
             userId: session.user.id!,
             cost:
-              (models[model].inputCost / 1000000) * usage.promptTokens +
-              (models[model].outputCost / 1000000) * usage.completionTokens,
+              (models[model].inputCost / 1_000_000) * usage.promptTokens +
+              (models[model].outputCost / 1_000_000) * usage.completionTokens,
           });
         },
       });

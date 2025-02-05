@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     model: ModelListType;
   };
 
-  if (session.user.credits < models[model].outputCost * 100000)
+  if (session.user.credits < models[model].outputCost * 100_000)
     return Response.json({ error: 'Insufficient credits' }, { status: 402 });
 
   if (!conversationId)
