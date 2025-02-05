@@ -98,6 +98,7 @@ function ReloadButton({
 }
 
 function ImagePreview({ attachment }: { attachment: Attachment }) {
+  // TODO: Add download button & improve UI
   return (
     <Dialog>
       <DialogTrigger asChild>
