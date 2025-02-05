@@ -215,13 +215,15 @@ export async function chargeUser({
   userId: string;
   cost: number;
 }) {
+  const profit = 1.5; // 50% profit margin
+
   await prisma.user.update({
     where: {
       id: userId,
     },
     data: {
       credits: {
-        decrement: Math.ceil(cost * 100000),
+        decrement: Math.ceil(cost * profit * 100000),
       },
     },
   });
