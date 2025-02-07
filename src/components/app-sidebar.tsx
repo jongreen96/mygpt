@@ -19,6 +19,7 @@ import {
   MoreHorizontalIcon,
   Plus,
   SquarePen,
+  X,
 } from 'lucide-react';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
@@ -36,6 +37,7 @@ import {
 import { Button } from './ui/button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -170,7 +172,14 @@ function ConversationInformation({ model }: { model: string }) {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Conversation Information</DialogTitle>
+            <DialogTitle className='flex items-center justify-between'>
+              Conversation Information
+              <DialogClose asChild>
+                <Button variant='outline' size='icon'>
+                  <X />
+                </Button>
+              </DialogClose>
+            </DialogTitle>
             <DialogDescription>
               Information about model settings as well as usage
             </DialogDescription>
