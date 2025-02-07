@@ -7,8 +7,24 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { defaultChatModel, ModelListType, models } from '@/lib/ai-models';
 import { Message, useChat } from 'ai/react';
-import { AlertCircle, ImagePlus, Loader2, Send } from 'lucide-react';
+import {
+  AlertCircle,
+  CircleHelpIcon,
+  ImagePlus,
+  Loader2,
+  Send,
+  X,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog';
 import ModelSettings from './model-settings';
 
 export default function Chat({
@@ -175,7 +191,7 @@ export default function Chat({
       <div ref={bottomRef} />
 
       <ErrorMessage error={error} handleReload={handleReload} />
-      <ThinkingMessage isLoading={isLoading} />
+      <ThinkingMessage isLoading={customIsLoading} model={selectedModel} />
 
       <ChatInput
         fileInputRef={fileInputRef}
@@ -352,13 +368,68 @@ function ErrorMessage({
   );
 }
 
-function ThinkingMessage({ isLoading }: { isLoading: boolean }) {
+function ThinkingMessage({
+  isLoading,
+  model,
+}: {
+  isLoading: boolean;
+  model: ModelListType;
+}) {
   if (!isLoading) return null;
 
+  const reasoningResponse = (
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle className='flex items-center justify-between'>
+          Reasoning Models
+          <DialogClose asChild>
+            <Button variant='outline' size='icon'>
+              <X />
+            </Button>
+          </DialogClose>
+        </DialogTitle>
+        <DialogDescription>
+          Reasoning models are AI systems that think through problems before
+          responding. Depending on the model and prompt this can take a few
+          seconds to a few minutes.
+        </DialogDescription>
+      </DialogHeader>
+    </DialogContent>
+  );
+
+  const imageResponse = (
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle className='flex items-center justify-between'>
+          Image Models
+          <DialogClose asChild>
+            <Button variant='outline' size='icon'>
+              <X />
+            </Button>
+          </DialogClose>
+        </DialogTitle>
+        <DialogDescription>
+          Image models are AI systems that generate images from text
+          descriptions. Depending on the model and prompt this can take a few
+          seconds to a few minutes.
+        </DialogDescription>
+      </DialogHeader>
+    </DialogContent>
+  );
+
   return (
-    <div className='flex gap-2 rounded bg-primary/20 p-2' role='alert'>
-      <Loader2 className='shrink-0' aria-hidden='true' />
+    <div className='flex items-center gap-2 p-2 text-muted-foreground'>
+      <Loader2 className='shrink-0 animate-spin' aria-hidden='true' />
       <p>Thinking...</p>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant='ghost' size='icon'>
+            <CircleHelpIcon />
+          </Button>
+        </DialogTrigger>
+
+        {models[model].type === 'image' ? imageResponse : reasoningResponse}
+      </Dialog>
     </div>
   );
 }

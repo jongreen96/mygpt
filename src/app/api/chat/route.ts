@@ -40,6 +40,8 @@ export async function POST(req: Request) {
 
   await processAttachments(messages, session.user.id);
 
+  console.log(model);
+
   return createDataStreamResponse({
     execute: (dataStream) => {
       const result = streamText({

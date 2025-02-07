@@ -23,14 +23,14 @@ export const models = {
     inputCost: 0.15 * openAiTax,
     outputCost: 0.6 * openAiTax,
   },
-  // o1: {
-  //   company: 'OpenAI',
-  //   type: 'multimodal',
-  //   description:
-  //     "o1 is OpenAI's most powerful reasoning model that supports tools, Structured Outputs, and vision. The model has 200K context and an October 2023 knowledge cutoff.",
-  //   inputCost: 15 * openAiTax,
-  //   outputCost: 60 * openAiTax,
-  // },
+  o1: {
+    company: 'OpenAI',
+    type: 'multimodal',
+    description:
+      "o1 is OpenAI's most powerful reasoning model that supports tools, Structured Outputs, and vision. The model has 200K context and an October 2023 knowledge cutoff.",
+    inputCost: 15 * openAiTax,
+    outputCost: 60 * openAiTax,
+  },
   'o1-mini': {
     company: 'OpenAI',
     type: 'multimodal',
@@ -39,14 +39,14 @@ export const models = {
     inputCost: 3 * openAiTax,
     outputCost: 12 * openAiTax,
   },
-  // 'o3-mini': {
-  //   company: 'OpenAI',
-  //   type: 'chat',
-  //   description:
-  //     "o3-mini is OpenAI's most recent small reasoning model, providing high intelligence at the same cost and latency targets of o1-mini. Like other models in the o-series, it is designed to excel at science, math, and coding tasks. The knowledge cutoff for o3-mini models is October, 2023.",
-  //   inputCost: 3 * openAiTax,
-  //   outputCost: 12 * openAiTax,
-  // },
+  'o3-mini': {
+    company: 'OpenAI',
+    type: 'chat',
+    description:
+      "o3-mini is OpenAI's most recent small reasoning model, providing high intelligence at the same cost and latency targets of o1-mini. Like other models in the o-series, it is designed to excel at science, math, and coding tasks. The knowledge cutoff for o3-mini models is October, 2023.",
+    inputCost: 3 * openAiTax,
+    outputCost: 12 * openAiTax,
+  },
   'gpt-4': {
     company: 'OpenAI',
     type: 'chat',
