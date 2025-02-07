@@ -1,8 +1,7 @@
 import { cn } from '@/lib/utils';
 import type { Attachment, Message } from 'ai';
 import { RefreshCcw, Trash2 } from 'lucide-react';
-import Markdown from 'react-markdown';
-import { markdownComponents } from '../typography';
+import { MemoizedMarkdown } from '../chat/memoized-markdown';
 import { Button } from './button';
 import {
   Dialog,
@@ -46,7 +45,7 @@ export default function MessageBubble({
           ))}
       </div>
 
-      <Markdown
+      {/* <Markdown
         className={cn(
           'overflow-hidden',
           (message.experimental_attachments?.length ?? 0) > 0 && 'mt-2',
@@ -54,7 +53,13 @@ export default function MessageBubble({
         components={markdownComponents}
       >
         {message.content}
-      </Markdown>
+      </Markdown> */}
+
+      <MemoizedMarkdown
+        id={message.id}
+        content={message.content}
+        attachments={(message.experimental_attachments?.length ?? 0) > 0}
+      />
 
       <div
         className={cn(
