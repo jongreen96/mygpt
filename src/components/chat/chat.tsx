@@ -28,9 +28,9 @@ export default function Chat({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedModel = localStorage.getItem('model') as ModelListType;
-      if (storedModel) setSelectedModel(storedModel);
+      if (storedModel && !model) setSelectedModel(storedModel);
     }
-  }, []);
+  }, [model]);
 
   const {
     messages,
@@ -175,6 +175,7 @@ export default function Chat({
       <div ref={bottomRef} />
 
       <ErrorMessage error={error} handleReload={handleReload} />
+      <ThinkingMessage isLoading={isLoading} />
 
       <ChatInput
         fileInputRef={fileInputRef}
@@ -347,6 +348,17 @@ function ErrorMessage({
           <p className='mt-1 text-sm text-destructive/80'>{error.message}</p>
         )}
       </div>
+    </div>
+  );
+}
+
+function ThinkingMessage({ isLoading }: { isLoading: boolean }) {
+  if (!isLoading) return null;
+
+  return (
+    <div className='flex gap-2 rounded bg-primary/20 p-2' role='alert'>
+      <Loader2 className='shrink-0' aria-hidden='true' />
+      <p>Thinking...</p>
     </div>
   );
 }
