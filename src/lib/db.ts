@@ -122,13 +122,36 @@ export async function getConversations(userId: string) {
       id: true,
       subject: true,
       model: true,
+      Message: {
+        where: {
+          deleted: null,
+        },
+        select: {
+          role: true,
+          tokens: true,
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',
     },
   });
 
-  return conversations;
+  return conversations.map((conv) => ({
+    id: conv.id,
+    subject: conv.subject,
+    model: conv.model,
+    usage: {
+      inputTokens: conv.Message.filter((m) => m.role === 'user').reduce(
+        (sum, m) => sum + (m.tokens || 0),
+        0,
+      ),
+      outputTokens: conv.Message.filter((m) => m.role === 'assistant').reduce(
+        (sum, m) => sum + (m.tokens || 0),
+        0,
+      ),
+    },
+  }));
 }
 
 export async function saveMessages({

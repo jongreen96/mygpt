@@ -143,6 +143,7 @@ function ConversationDropdownMenu({
     id: string;
     subject: string;
     model: string;
+    usage: { inputTokens: number; outputTokens: number };
   };
 }) {
   return (
@@ -154,7 +155,7 @@ function ConversationDropdownMenu({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className='w-min'>
-        <ConversationInformation model={conversation.model} />
+        <ConversationInformation conversation={conversation} />
 
         <ConversationDelete id={conversation.id} />
       </DropdownMenuContent>
@@ -162,8 +163,19 @@ function ConversationDropdownMenu({
   );
 }
 
-function ConversationInformation({ model }: { model: string }) {
-  // TODO: Finish implementation
+function ConversationInformation({
+  conversation,
+}: {
+  conversation: {
+    id: string;
+    subject: string;
+    model: string;
+    usage: {
+      inputTokens: number;
+      outputTokens: number;
+    };
+  };
+}) {
   return (
     <DropdownMenuItem asChild>
       <Dialog>
@@ -189,7 +201,15 @@ function ConversationInformation({ model }: { model: string }) {
             <TableBody>
               <TableRow>
                 <TableCell>Model</TableCell>
-                <TableCell>{model}</TableCell>
+                <TableCell>{conversation.model}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Input Tokens</TableCell>
+                <TableCell>{conversation.usage.inputTokens}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Output Tokens</TableCell>
+                <TableCell>{conversation.usage.outputTokens}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
