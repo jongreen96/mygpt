@@ -1,10 +1,11 @@
 import { cn } from '@/lib/utils';
 import type { Attachment, Message } from 'ai';
-import { RefreshCcw, Trash2 } from 'lucide-react';
+import { Download, ExternalLink, RefreshCcw, Trash2, X } from 'lucide-react';
 import { MemoizedMarkdown } from '../chat/memoized-markdown';
 import { Button } from './button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -93,7 +94,6 @@ function ReloadButton({
 }
 
 function ImagePreview({ attachment }: { attachment: Attachment }) {
-  // TODO: Add download button & improve UI
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -109,7 +109,26 @@ function ImagePreview({ attachment }: { attachment: Attachment }) {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{attachment.name}</DialogTitle>
+          <DialogTitle className='flex items-center justify-between'>
+            {attachment.name}
+            <div className='space-x-2'>
+              <Button
+                size='icon'
+                onClick={() => window.open(attachment.url, '_blank')}
+                variant='ghost'
+              >
+                <ExternalLink />
+              </Button>
+              <Button size='icon' onClick={() => downloadImage(attachment)}>
+                <Download />
+              </Button>
+              <DialogClose asChild>
+                <Button size='icon' variant='outline'>
+                  <X />
+                </Button>
+              </DialogClose>
+            </div>
+          </DialogTitle>
         </DialogHeader>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -120,4 +139,17 @@ function ImagePreview({ attachment }: { attachment: Attachment }) {
       </DialogContent>
     </Dialog>
   );
+}
+
+async function downloadImage(attachment: Attachment) {
+  const response = await fetch(attachment.url);
+  const blob = await response.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = attachment.name || 'image';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
 }
