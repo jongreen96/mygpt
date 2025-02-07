@@ -45,16 +45,6 @@ export default function MessageBubble({
           ))}
       </div>
 
-      {/* <Markdown
-        className={cn(
-          'overflow-hidden',
-          (message.experimental_attachments?.length ?? 0) > 0 && 'mt-2',
-        )}
-        components={markdownComponents}
-      >
-        {message.content}
-      </Markdown> */}
-
       <MemoizedMarkdown
         id={message.id}
         content={message.content}
