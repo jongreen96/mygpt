@@ -198,7 +198,6 @@ export const markdownComponents: Components = {
             customStyle={{ borderRadius: 4, fontSize: 14 }}
             {...props}
           >
-            {/* TODO: URGENT! Fix error when generating image responses */}
             {String(children).replace(/\n$/, '')}
           </SyntaxHighlighter>
         </div>
