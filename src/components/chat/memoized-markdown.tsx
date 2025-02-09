@@ -44,6 +44,15 @@ export const MemoizedMarkdown = memo(
     id: string;
     attachments: boolean;
   }) => {
+    if (!content)
+      return (
+        <ReactMarkdown
+          components={markdownComponents}
+          className={cn(attachments && 'mt-2')}
+        />
+      );
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const blocks = useMemo(() => parseMarkdownIntoBlocks(content), [content]);
 
     return blocks.map((block, index) => (
