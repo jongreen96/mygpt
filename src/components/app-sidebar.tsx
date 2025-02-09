@@ -13,14 +13,7 @@ import {
 } from '@/components/ui/sidebar';
 import { deleteConversation, getConversations } from '@/lib/db';
 import getSession from '@/lib/hooks/get-session';
-import { cn, formatCredits } from '@/lib/utils';
-import {
-  MessageSquare,
-  MoreHorizontalIcon,
-  Plus,
-  SquarePen,
-  X,
-} from 'lucide-react';
+import { MessageSquare, MoreHorizontalIcon, SquarePen, X } from 'lucide-react';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 import {
@@ -53,7 +46,6 @@ import {
 import { Separator } from './ui/separator';
 import { CustomInternalTrigger } from './ui/sidebar-trigger';
 import { Table, TableBody, TableCell, TableRow } from './ui/table';
-import { ThemeToggle } from './ui/theme-selector';
 import UserAvatar from './ui/user-avatar';
 
 export async function AppSidebar() {
@@ -97,39 +89,16 @@ export async function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className='-mb-2'>
         <Separator />
 
-        <div className='flex items-center justify-between'>
-          <p className='select-none text-sm'>
-            Credits:{' '}
-            <span
-              className={cn(
-                'text-base font-bold',
-                session.user.credits < 0 && 'text-destructive',
-              )}
-            >
-              {formatCredits(session?.user?.credits)}
-            </span>
-          </p>
-
-          <Button asChild variant='ghost'>
-            <Link href='/chat/pricing'>
-              <Plus />
-              Add credits
-            </Link>
-          </Button>
-        </div>
-
-        <Separator />
-
-        <div className='flex items-center justify-between'>
+        <div>
           <UserAvatar
             userName={session.user?.name}
             userImage={session.user?.image}
+            userEmail={session.user.email}
+            userCredits={session.user.credits}
           />
-
-          <ThemeToggle />
         </div>
       </SidebarFooter>
     </Sidebar>
