@@ -2,11 +2,10 @@
 
 import { formatCredits } from '@/lib/utils';
 import {
+  BadgeCentIcon,
   EllipsisVerticalIcon,
   LogOutIcon,
   Plus,
-  Section,
-  SectionIcon,
   SunMoonIcon,
 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
@@ -44,8 +43,8 @@ export default function UserAvatar({
 
           <div className='-space-y-0.5 text-left text-sm'>
             <p className='font-bold'>{userName}</p>
-            <p className='text-muted-foreground'>
-              Credits: <Section className='-mt-0.5 inline-block size-3' />
+            <p className='text-xs text-muted-foreground'>
+              Credits: <BadgeCentIcon className='-mt-0.5 inline-block size-3' />{' '}
               {formatCredits(userCredits)}
             </p>
           </div>
@@ -70,7 +69,7 @@ export default function UserAvatar({
 
         <DropdownMenuItem asChild>
           <Link href='/chat/pricing'>
-            <SectionIcon className='-mr-1 size-4' />
+            <BadgeCentIcon className='-mr-1 size-4' />
             Add Credits
             <Plus className='ml-auto' />
           </Link>
