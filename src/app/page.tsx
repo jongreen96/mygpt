@@ -141,7 +141,9 @@ export default async function Home() {
           So, the question is... <br /> What are you waiting for?
         </h2>
 
-        <Button className='w-full max-w-prose'>Get Started</Button>
+        <Button className='w-full max-w-prose' asChild>
+          <Link href='/login'>Get Started</Link>
+        </Button>
       </section>
     </main>
   );
