@@ -17,7 +17,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Resend({
       apiKey: process.env.RESEND_API_KEY,
-      from: 'Bot <support@jongreen.dev>',
+      from: 'My-GPT <support@jongreen.dev>',
     }),
     Google({
       allowDangerousEmailAccountLinking: true,
