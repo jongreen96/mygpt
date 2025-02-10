@@ -17,6 +17,8 @@ const client = new S3Client({
   requestChecksumCalculation: 'WHEN_REQUIRED',
 });
 
+// TODO: URGENT! Add logic to prevent users going negative with credits
+
 export async function POST(req: Request) {
   const session = await auth();
   if (typeof session?.user?.id === 'undefined') return;
