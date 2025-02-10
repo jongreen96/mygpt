@@ -31,7 +31,7 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className='mx-auto grid min-h-[60dvh] max-w-7xl gap-10 px-2 sm:grid-cols-2 sm:gap-2'>
+      <section className='mx-auto grid min-h-[60svh] max-w-7xl gap-10 px-2 sm:grid-cols-2 sm:gap-2'>
         <div className='flex items-center justify-center'>
           <div className='text-center sm:text-left'>
             <H1 className='font-bold'>
