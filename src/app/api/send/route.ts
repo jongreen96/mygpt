@@ -6,7 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST() {
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Bot <support@jongreen.dev>',
+      from: 'My-GPT <support@jongreen.dev>',
       to: ['jongreen1996@gmail.com'],
       subject: 'Hello world',
       react: EmailTemplate({ firstName: 'Jon' }),

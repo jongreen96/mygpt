@@ -33,7 +33,6 @@ export default async function LoginPage() {
             <SubmitButton>Sign In with Google</SubmitButton>
           </form>
 
-          {/* TODO: Implement email for prod */}
           <div className='grid grid-cols-[2fr_1fr_2fr] items-center text-center text-sm'>
             <Separator />
             or
