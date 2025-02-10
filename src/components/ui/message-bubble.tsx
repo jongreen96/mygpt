@@ -100,17 +100,32 @@ function ImagePreview({ attachment }: { attachment: Attachment }) {
       const response = await fetch(attachment.url);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
+
+      // Create a hidden download link
       const a = document.createElement('a');
       a.href = url;
       a.download = attachment.name || 'download';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+
+      // Detect if the user is on iOS
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      if (isIOS) {
+        // Open in a new tab (iOS doesn't allow auto-download)
+        window.open(attachment.url, '_blank');
+      } else {
+        // Auto-download on desktop
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }
     } catch (error) {
       console.error('Download failed:', error);
     }
   };
+
+  <Button size='icon' variant='ghost' onClick={handleDownload}>
+    <Download />
+  </Button>;
 
   return (
     <Dialog>
