@@ -45,11 +45,10 @@ export default async function Home() {
               simply pay for what you use.
             </P>
 
-            <div className='mt-10 space-x-2'>
+            <div className='mt-10'>
               <Button asChild>
                 <Link href='/login'>Get Started</Link>
               </Button>
-              <Button variant='outline'>Learn More</Button>
             </div>
           </div>
         </div>
