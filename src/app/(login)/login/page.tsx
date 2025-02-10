@@ -43,7 +43,7 @@ export default async function LoginPage() {
           <form
             action={async (formData) => {
               'use server';
-              await signIn('nodemailer', formData);
+              await signIn('resend', formData);
             }}
             className='space-y-2'
           >

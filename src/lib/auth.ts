@@ -1,7 +1,7 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import NextAuth, { type DefaultSession } from 'next-auth';
 import Google from 'next-auth/providers/google';
-import Nodemailer from 'next-auth/providers/nodemailer';
+import Resend from 'next-auth/providers/resend';
 import prisma from './db';
 
 declare module 'next-auth' {
@@ -15,16 +15,9 @@ declare module 'next-auth' {
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
-    Nodemailer({
-      server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
-        auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASSWORD,
-        },
-      },
-      from: process.env.EMAIL_FROM,
+    Resend({
+      apiKey: process.env.RESEND_API_KEY,
+      from: 'Bot <support@jongreen.dev>',
     }),
     Google({
       allowDangerousEmailAccountLinking: true,
