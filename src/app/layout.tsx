@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'My-GPT',
-  description: 'AI Chatbot',
+  description:
+    "Access the most advanced AI models without restrictions. Whether you need powerful text generation, coding assistance, or deep AI analysis, you'll always have the latest models at your fingertips.",
 };
 
 export default function RootLayout({
