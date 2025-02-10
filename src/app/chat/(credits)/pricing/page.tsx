@@ -75,14 +75,14 @@ export default function PricingPage() {
           </div>
 
           <div className='grid grid-cols-3 gap-2'>
+            <Button variant='outline' onClick={() => setNewCredits(5)}>
+              5
+            </Button>
             <Button variant='outline' onClick={() => setNewCredits(10)}>
               10
             </Button>
             <Button variant='outline' onClick={() => setNewCredits(20)}>
               20
-            </Button>
-            <Button variant='outline' onClick={() => setNewCredits(50)}>
-              50
             </Button>
           </div>
 
