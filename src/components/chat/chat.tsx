@@ -191,7 +191,10 @@ export default function Chat({
       <div ref={bottomRef} />
 
       <ErrorMessage error={error} handleReload={handleReload} />
-      <ThinkingMessage isLoading={customIsLoading} model={selectedModel} />
+      <ThinkingMessage
+        isLoading={customIsLoading || isLoading}
+        model={selectedModel}
+      />
 
       <ChatInput
         fileInputRef={fileInputRef}
