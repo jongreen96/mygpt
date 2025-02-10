@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import type { Attachment, Message } from 'ai';
 import { Download, ExternalLink, RefreshCcw, Trash2, X } from 'lucide-react';
+import Image from 'next/image';
 import { MemoizedMarkdown } from '../chat/memoized-markdown';
 import { Button } from './button';
 import {
@@ -94,12 +95,30 @@ function ReloadButton({
 }
 
 function ImagePreview({ attachment }: { attachment: Attachment }) {
+  const handleDownload = async () => {
+    try {
+      const response = await fetch(attachment.url);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = attachment.name || 'download';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         <div className='aspect-square w-full cursor-pointer overflow-hidden rounded bg-gray-200'>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
+            width={256}
+            height={256}
             src={attachment.url}
             alt={`User image`}
             className='h-full w-full max-w-64 object-cover'
@@ -119,9 +138,10 @@ function ImagePreview({ attachment }: { attachment: Attachment }) {
               >
                 <ExternalLink />
               </Button>
-              <Button size='icon' onClick={() => downloadImage(attachment)}>
+              <Button size='icon' variant='secondary' onClick={handleDownload}>
                 <Download />
               </Button>
+
               <DialogClose asChild>
                 <Button size='icon' variant='outline'>
                   <X />
@@ -139,17 +159,4 @@ function ImagePreview({ attachment }: { attachment: Attachment }) {
       </DialogContent>
     </Dialog>
   );
-}
-
-async function downloadImage(attachment: Attachment) {
-  const response = await fetch(attachment.url);
-  const blob = await response.blob();
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = attachment.name || 'image';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  window.URL.revokeObjectURL(url);
 }
