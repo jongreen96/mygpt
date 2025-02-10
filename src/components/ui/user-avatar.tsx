@@ -1,6 +1,6 @@
 'use client';
 
-import { formatCredits } from '@/lib/utils';
+import { formatCredits, formatCreditsLong } from '@/lib/utils';
 import {
   BadgeCentIcon,
   EllipsisVerticalIcon,
@@ -62,6 +62,10 @@ export default function UserAvatar({
           <div className='-space-y-0.5 text-left text-sm font-normal'>
             <p className='font-semibold'>{userName}</p>
             <p className='text-xs text-muted-foreground'>{userEmail}</p>
+            <p className='flex items-center gap-1 pt-1 text-xs text-muted-foreground'>
+              <BadgeCentIcon className='size-4' />
+              {formatCreditsLong(userCredits)}
+            </p>
           </div>
         </DropdownMenuLabel>
 

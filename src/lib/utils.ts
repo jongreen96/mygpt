@@ -36,3 +36,11 @@ export function formatCredits(credits: number) {
     maximumFractionDigits: 2,
   }).format(credits / 100000);
 }
+
+export function formatCreditsLong(credits: number) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'decimal',
+    minimumFractionDigits: 5,
+    maximumFractionDigits: 6,
+  }).format(credits / 100000);
+}
