@@ -73,9 +73,9 @@ export default async function Home() {
       <section className='mx-auto grid max-w-5xl gap-6 px-2 text-center sm:grid-cols-3 sm:text-left'>
         <Card>
           <CardHeader>
-            <CardTitle className='flex items-center justify-between text-lg'>
+            <CardTitle className='flex flex-row-reverse items-center justify-center gap-2 text-lg sm:flex-row sm:justify-between'>
               Cutting Edge AI Models
-              <BrainIcon />
+              <BrainIcon className='shrink-0' />
             </CardTitle>
             <CardDescription></CardDescription>
           </CardHeader>
@@ -89,9 +89,9 @@ export default async function Home() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className='flex items-center justify-between text-lg'>
+            <CardTitle className='flex flex-row-reverse items-center justify-center gap-2 text-lg sm:flex-row sm:justify-between'>
               Generate AI Images
-              <ImageIcon />
+              <ImageIcon className='shrink-0' />
             </CardTitle>
             <CardDescription></CardDescription>
           </CardHeader>
@@ -104,9 +104,9 @@ export default async function Home() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className='flex items-center justify-between text-lg'>
-              Pay-As-You-Go
-              <HandCoinsIcon />
+            <CardTitle className='flex flex-row-reverse items-center justify-center gap-2 text-lg sm:flex-row sm:justify-between'>
+              Pay As You Go
+              <HandCoinsIcon className='shrink-0' />
             </CardTitle>
             <CardDescription></CardDescription>
           </CardHeader>
