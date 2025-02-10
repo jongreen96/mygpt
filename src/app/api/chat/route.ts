@@ -46,6 +46,8 @@ export async function POST(req: Request) {
     execute: (dataStream) => {
       const result = streamText({
         model: openai(model) || openai('gpt-4o-mini'),
+        system:
+          'When returning code ALWAYS use markdown and use the CORRECT FULL language name',
         messages,
 
         onFinish({ text, usage }) {
