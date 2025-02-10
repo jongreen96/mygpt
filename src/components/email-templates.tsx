@@ -4,9 +4,10 @@ export const EmailTemplate = ({ firstName }: { firstName: string }) => (
   </div>
 );
 
-export const NewUserEmail = () => (
+export const AdminTransactionEmail = ({ pricePaid }: { pricePaid: number }) => (
   <div>
-    <h1>New User!</h1>
-    <p>Holy shit someone actually signed up!</p>
+    <h1>MULA!</h1>
+    <p>Holy shit someone actually sent you money!</p>
+    <p>Amount: ${pricePaid}</p>
   </div>
 );

@@ -1,5 +1,5 @@
 import { addCredits, logTransaction } from '@/lib/db';
-import { sendNewUserEmail } from '@/lib/hooks/new-user-email';
+import { sendAdminTransactionEmail } from '@/lib/hooks/new-user-email';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
 
@@ -50,5 +50,5 @@ async function fulfillOrder(session: Stripe.Checkout.Session) {
 
   await addCredits(userId, pricePaid * 1000);
   await logTransaction(userId, pricePaid);
-  await sendNewUserEmail();
+  await sendAdminTransactionEmail(pricePaid / 100);
 }
