@@ -260,3 +260,39 @@ export async function logTransaction(userId: string, pricePaidInCents: number) {
     },
   });
 }
+
+export async function getAdminStats() {
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      credits: true,
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+  const transactionCount = await prisma.transactions.count();
+  const totalCredits = await prisma.user.aggregate({
+    _sum: {
+      credits: true,
+    },
+    where: {
+      email: { notIn: ['jongreen1996@gmail.com', 'cuddlebear219@gmail.com'] },
+    },
+  });
+  const totalTransactions = await prisma.transactions.aggregate({
+    _sum: {
+      pricePaidInCents: true,
+    },
+  });
+
+  return {
+    users,
+    transactionCount,
+    totalCredits: totalCredits._sum.credits || 0,
+    totalRevenue: (totalTransactions._sum.pricePaidInCents || 0) / 100,
+  };
+}

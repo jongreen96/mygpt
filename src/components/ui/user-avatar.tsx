@@ -2,6 +2,7 @@
 
 import { formatCredits, formatCreditsLong } from '@/lib/utils';
 import {
+  AlignEndHorizontalIcon,
   BadgeCentIcon,
   EllipsisVerticalIcon,
   LogOutIcon,
@@ -71,6 +72,8 @@ export default function UserAvatar({
 
         <DropdownMenuSeparator />
 
+        <AdminButton userEmail={userEmail} />
+
         <DropdownMenuItem asChild>
           <Link href='/chat/pricing'>
             <BadgeCentIcon className='-mr-1 size-4' />
@@ -95,5 +98,20 @@ export default function UserAvatar({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function AdminButton({ userEmail }: { userEmail: string | null | undefined }) {
+  if (userEmail !== 'jongreen1996@gmail.com') {
+    return null;
+  }
+
+  return (
+    <DropdownMenuItem asChild>
+      <Link href='/chat/admin_dashboard'>
+        <AlignEndHorizontalIcon />
+        Admin Dashboard
+      </Link>
+    </DropdownMenuItem>
   );
 }
