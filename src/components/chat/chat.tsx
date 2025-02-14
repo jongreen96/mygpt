@@ -263,8 +263,7 @@ function ChatInput({
         />
 
         <SubmitButton
-          isLoading={isLoading}
-          customIsLoading={customIsLoading}
+          isLoading={isLoading || customIsLoading}
           customHandleSubmit={customHandleSubmit}
         />
       </div>
@@ -299,17 +298,15 @@ function ChatInput({
 
 function SubmitButton({
   isLoading,
-  customIsLoading,
   customHandleSubmit,
 }: {
   isLoading: boolean;
-  customIsLoading: boolean;
   customHandleSubmit: (e: React.FormEvent) => void;
 }) {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      if (!customIsLoading || !isLoading) {
+      if (!isLoading) {
         customHandleSubmit(e as unknown as React.FormEvent);
       }
     }
@@ -319,14 +316,12 @@ function SubmitButton({
     <Button
       type='submit'
       size='icon'
-      aria-label={
-        customIsLoading || isLoading ? 'Sending message...' : 'Send message'
-      }
-      disabled={customIsLoading || isLoading}
+      aria-label={isLoading ? 'Sending message...' : 'Send message'}
+      disabled={isLoading}
       onClick={(e) => customHandleSubmit(e)}
       onKeyDown={handleKeyDown}
     >
-      {!customIsLoading && !isLoading ? (
+      {!isLoading ? (
         <Send className='scale-125' aria-hidden='true' />
       ) : (
         <Loader2 className='animate-spin' aria-hidden='true' />
