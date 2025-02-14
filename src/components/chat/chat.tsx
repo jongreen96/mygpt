@@ -191,10 +191,6 @@ export default function Chat({
       <div ref={bottomRef} />
 
       <ErrorMessage error={error} handleReload={handleReload} />
-      <ThinkingMessage
-        isLoading={customIsLoading || isLoading}
-        model={selectedModel}
-      />
 
       <ChatInput
         fileInputRef={fileInputRef}
@@ -240,6 +236,11 @@ function ChatInput({
 }) {
   return (
     <form className='fixed bottom-0 flex w-[calc(100%-16px)] max-w-[752px] flex-col items-center gap-2 rounded-t-lg bg-sidebar/80 p-2 backdrop-blur-sm'>
+      <ThinkingMessage
+        isLoading={customIsLoading || isLoading}
+        model={selectedModel}
+      />
+
       <input
         type='file'
         accept='image/*'
@@ -416,13 +417,13 @@ function ThinkingMessage({
   );
 
   return (
-    <div className='flex items-center gap-2 p-2 text-muted-foreground'>
-      <Loader2 className='shrink-0 animate-spin' aria-hidden='true' />
+    <div className='absolute -top-8 right-0 flex items-center gap-2 rounded-t-lg bg-sidebar/80 px-2 text-sm text-muted-foreground backdrop-blur-sm'>
+      <Loader2 className='size-4 shrink-0 animate-spin' aria-hidden='true' />
       <p>Thinking...</p>
       <Dialog>
         <DialogTrigger asChild>
           <Button variant='ghost' size='icon'>
-            <CircleHelpIcon />
+            <CircleHelpIcon className='scale-90' />
           </Button>
         </DialogTrigger>
 
