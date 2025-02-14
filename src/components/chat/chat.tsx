@@ -25,6 +25,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog';
+import { Textarea } from '../ui/textarea';
 import ModelSettings from './model-settings';
 
 export default function Chat({
@@ -104,6 +105,8 @@ export default function Chat({
 
   const customHandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!input.trim()) return;
 
     switch (models[selectedModel as keyof typeof models].type) {
       case 'chat':
@@ -226,7 +229,7 @@ function ChatInput({
   files: FileList | undefined;
   setFiles: React.Dispatch<React.SetStateAction<FileList | undefined>>;
   input: string;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   isLoading: boolean;
   customIsLoading: boolean;
   customHandleSubmit: (e: React.FormEvent) => void;
@@ -255,11 +258,17 @@ function ChatInput({
       />
 
       <div className='flex w-full gap-2'>
-        <input
-          className='grow rounded border border-gray-300 p-[5px] shadow-lg'
+        <Textarea
+          className='custominputsizing grow rounded border border-gray-300 p-[5px] shadow-lg'
           value={input}
           placeholder='Say something...'
           onChange={handleInputChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              customHandleSubmit(e);
+            }
+          }}
           autoFocus
         />
 
@@ -321,6 +330,7 @@ function SubmitButton({
       disabled={isLoading}
       onClick={(e) => customHandleSubmit(e)}
       onKeyDown={handleKeyDown}
+      className='shrink-0 self-end'
     >
       {!isLoading ? (
         <Send className='scale-125' aria-hidden='true' />

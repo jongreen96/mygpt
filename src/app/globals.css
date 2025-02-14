@@ -105,3 +105,10 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.custominputsizing {
+  field-sizing: content;
+  height: min-content;
+  resize: none;
+  max-height: 50svh;
+}
