@@ -263,6 +263,7 @@ function ChatInput({
           value={input}
           placeholder='Say something...'
           onChange={handleInputChange}
+          rows={1}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
