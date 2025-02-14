@@ -280,7 +280,7 @@ export async function getAdminStats() {
       credits: true,
     },
     where: {
-      email: { notIn: ['jongreen1996@gmail.com', 'cuddlebear219@gmail.com'] },
+      email: { not: 'jongreen1996@gmail.com' },
     },
   });
   const totalTransactions = await prisma.transactions.aggregate({

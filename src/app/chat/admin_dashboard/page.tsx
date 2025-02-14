@@ -26,8 +26,11 @@ export default async function AdminDashboard() {
           <CardHeader>
             <CardTitle>Total Users:</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className='flex items-center gap-2'>
             <p className='text-5xl font-bold'>{stats.users.length}</p>
+            <p className='text-xl text-muted-foreground'>
+              +{stats.users.filter((user) => isToday(user.createdAt)).length}
+            </p>
           </CardContent>
         </Card>
 
@@ -58,7 +61,7 @@ export default async function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <p className='text-5xl font-bold'>
-              ${(stats.totalCredits / 100000).toFixed(2)}
+              ${((stats.totalCredits / 100000) * 0.66).toFixed(2)}
             </p>
           </CardContent>
         </Card>
