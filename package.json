@@ -26,6 +26,7 @@
     "@radix-ui/react-slider": "^1.2.2",
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.6",
+    "@sentry/nextjs": "^8.55.0",
     "@stripe/stripe-js": "^5.5.0",
     "ai": "^4.0.22",
     "class-variance-authority": "^0.7.1",
