@@ -41,15 +41,10 @@ export async function POST(req: Request) {
     model: openai.image(model),
     prompt: prompt.content,
     size: '1024x1024',
-    providerOptions: {
-      openai: {
-        style: 'vivid',
-        quality: 'hd',
-      },
-    },
+    providerOptions: { openai: { style: 'vivid', quality: 'hd' } },
   });
 
-  const Key = `ai-images/${nanoid()}`;
+  const Key = `ai-images/${session.user.id}/${nanoid()}`;
   const command = new PutObjectCommand({
     Bucket: process.env.CLOUDFLARE_BUCKET_NAME!,
     Key,
@@ -59,10 +54,7 @@ export async function POST(req: Request) {
 
   await client.send(command);
 
-  await chargeUser({
-    userId: session.user.id,
-    cost: models[model].outputCost,
-  });
+  await chargeUser({ userId: session.user.id, cost: models[model].outputCost });
 
   const responseMessage = {
     content: undefined,
@@ -80,15 +72,8 @@ export async function POST(req: Request) {
     conversationId,
     userMessage: prompt,
     assistantMessage: responseMessage,
-    usage: {
-      promptTokens: 0,
-      completionTokens: 1000,
-      totalTokens: 1000,
-    },
+    usage: { promptTokens: 0, completionTokens: 1000, totalTokens: 1000 },
   });
 
-  return Response.json({
-    conversationId,
-    message: responseMessage,
-  });
+  return Response.json({ conversationId, message: responseMessage });
 }
