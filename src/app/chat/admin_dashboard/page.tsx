@@ -65,13 +65,64 @@ export default async function AdminDashboard() {
             </p>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className='flex items-center justify-between'>
+              Total Conversations:
+              <span className='font-normal'>
+                {new Intl.NumberFormat('en-GB').format(
+                  stats.stats.totalConversations,
+                )}
+              </span>
+            </CardTitle>
+          </CardHeader>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className='flex items-center justify-between'>
+              Total Messages:
+              <span className='font-normal'>
+                {new Intl.NumberFormat('en-GB').format(
+                  stats.stats.totalMessages,
+                )}
+              </span>
+            </CardTitle>
+          </CardHeader>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className='flex items-center justify-between'>
+              Total Input Tokens:
+              <span className='font-normal'>
+                {new Intl.NumberFormat('en-GB').format(
+                  stats.stats.totalInputTokens,
+                )}
+              </span>
+            </CardTitle>
+          </CardHeader>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className='flex items-center justify-between'>
+              Total Output Tokens:
+              <span className='font-normal'>
+                {new Intl.NumberFormat('en-GB').format(
+                  stats.stats.totalOutputTokens,
+                )}
+              </span>
+            </CardTitle>
+          </CardHeader>
+        </Card>
       </section>
 
       <section>
         <Table className='mx-auto max-w-5xl'>
           <TableHeader>
             <TableRow>
-              <TableHead>id</TableHead>
               <TableHead>name</TableHead>
               <TableHead>email</TableHead>
               <TableHead>credits</TableHead>
@@ -81,7 +132,6 @@ export default async function AdminDashboard() {
           <TableBody>
             {stats.users.map((user) => (
               <TableRow key={user.id}>
-                <TableCell>{user.id}</TableCell>
                 <TableCell className={cn(!user.name && 'text-muted')}>
                   {user.name || 'unknown'}
                 </TableCell>

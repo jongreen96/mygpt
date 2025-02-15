@@ -29,14 +29,8 @@ export async function createConversation({
   const subject = await generateSubject(messages);
 
   const newConversation = await prisma.conversation.create({
-    data: {
-      userId,
-      subject: subject,
-      model,
-    },
-    select: {
-      id: true,
-    },
+    data: { userId, subject: subject, model },
+    select: { id: true },
   });
 
   return newConversation.id;
@@ -44,22 +38,13 @@ export async function createConversation({
 
 export async function deleteConversation(conversationId: string) {
   await prisma.conversation.update({
-    where: {
-      id: conversationId,
-    },
-    data: {
-      deleted: new Date().toISOString(),
-    },
+    where: { id: conversationId },
+    data: { deleted: new Date().toISOString() },
   });
 
   await prisma.message.updateMany({
-    where: {
-      conversationId,
-      deleted: null,
-    },
-    data: {
-      deleted: new Date().toISOString(),
-    },
+    where: { conversationId, deleted: null },
+    data: { deleted: new Date().toISOString() },
   });
 }
 
@@ -68,11 +53,7 @@ export async function getConversation(
   userId: string | undefined,
 ) {
   const conversation = await prisma.conversation.findUnique({
-    where: {
-      id: conversationId,
-      userId,
-      deleted: null,
-    },
+    where: { id: conversationId, userId, deleted: null },
     select: {
       id: true,
       subject: true,
@@ -84,13 +65,8 @@ export async function getConversation(
           role: true,
           experimental_attachments: true,
         },
-        where: {
-          conversationId: conversationId,
-          deleted: null,
-        },
-        orderBy: {
-          id: 'asc',
-        },
+        where: { conversationId: conversationId, deleted: null },
+        orderBy: { id: 'asc' },
       },
     },
   });
@@ -114,27 +90,17 @@ export async function getConversation(
 
 export async function getConversations(userId: string) {
   const conversations = await prisma.conversation.findMany({
-    where: {
-      userId,
-      deleted: null,
-    },
+    where: { userId, deleted: null },
     select: {
       id: true,
       subject: true,
       model: true,
       Message: {
-        where: {
-          deleted: null,
-        },
-        select: {
-          role: true,
-          tokens: true,
-        },
+        where: { deleted: null },
+        select: { role: true, tokens: true },
       },
     },
-    orderBy: {
-      createdAt: 'desc',
-    },
+    orderBy: { createdAt: 'desc' },
   });
 
   return conversations.map((conv) => ({
@@ -208,26 +174,16 @@ export async function deleteMessage(
     deleteConversation(conversationId);
   } else {
     await prisma.message.update({
-      where: {
-        id: messageId,
-      },
-      data: {
-        deleted: new Date().toISOString(),
-      },
+      where: { id: messageId },
+      data: { deleted: new Date().toISOString() },
     });
   }
 }
 
 export async function addCredits(userId: string, credits: number) {
   await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      credits: {
-        increment: credits,
-      },
-    },
+    where: { id: userId },
+    data: { credits: { increment: credits } },
   });
 }
 
@@ -241,56 +197,62 @@ export async function chargeUser({
   const profit = 1.5; // 50% profit margin
 
   await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      credits: {
-        decrement: Math.ceil(cost * profit * 100_000),
-      },
-    },
+    where: { id: userId },
+    data: { credits: { decrement: Math.ceil(cost * profit * 100_000) } },
   });
 }
 
 export async function logTransaction(userId: string, pricePaidInCents: number) {
-  await prisma.transactions.create({
-    data: {
-      userId,
-      pricePaidInCents,
-    },
-  });
+  await prisma.transactions.create({ data: { userId, pricePaidInCents } });
 }
 
 export async function getAdminStats() {
-  const users = await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      credits: true,
-      createdAt: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  const transactionCount = await prisma.transactions.count();
-  const totalCredits = await prisma.user.aggregate({
-    _sum: {
-      credits: true,
-    },
-    where: {
-      email: { not: 'jongreen1996@gmail.com' },
-    },
-  });
-  const totalTransactions = await prisma.transactions.aggregate({
-    _sum: {
-      pricePaidInCents: true,
-    },
-  });
+  const [
+    users,
+    transactionCount,
+    totalCredits,
+    totalTransactions,
+    messageCount,
+    inputTokens,
+    outputTokens,
+    conversationCount,
+  ] = await prisma.$transaction([
+    prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        credits: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.transactions.count(),
+    prisma.user.aggregate({
+      _sum: { credits: true },
+      where: { email: { not: 'jongreen1996@gmail.com' } },
+    }),
+    prisma.transactions.aggregate({ _sum: { pricePaidInCents: true } }),
+    prisma.message.count({ where: { deleted: null } }),
+    prisma.message.aggregate({
+      where: { role: 'user', deleted: null },
+      _sum: { tokens: true },
+    }),
+    prisma.message.aggregate({
+      where: { role: 'assistant', deleted: null },
+      _sum: { tokens: true },
+    }),
+    prisma.conversation.count({ where: { deleted: null } }),
+  ]);
 
   return {
     users,
+    stats: {
+      totalMessages: messageCount,
+      totalInputTokens: inputTokens._sum.tokens || 0,
+      totalOutputTokens: outputTokens._sum.tokens || 0,
+      totalConversations: conversationCount,
+    },
     transactionCount,
     totalCredits: totalCredits._sum.credits || 0,
     totalRevenue: (totalTransactions._sum.pricePaidInCents || 0) / 100,
