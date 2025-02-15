@@ -371,45 +371,38 @@ function ThinkingMessage({
 }) {
   if (customStatus !== 'submitted') return null;
 
-  const reasoningResponse = (
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle className='flex items-center justify-between'>
-          Reasoning Models
-          <DialogClose asChild>
-            <Button variant='outline' size='icon'>
-              <X />
+  if (models[model].type === 'image')
+    return (
+      <div className='flex items-center gap-2 px-2 text-sm text-muted-foreground'>
+        <Loader2 className='size-4 shrink-0 animate-spin' aria-hidden='true' />
+        <p>Generating...</p>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant='ghost' size='icon'>
+              <CircleHelpIcon className='scale-90' />
             </Button>
-          </DialogClose>
-        </DialogTitle>
-        <DialogDescription>
-          Reasoning models are AI systems that think through problems before
-          responding. Depending on the model and prompt this can take a few
-          seconds to a few minutes.
-        </DialogDescription>
-      </DialogHeader>
-    </DialogContent>
-  );
+          </DialogTrigger>
 
-  const imageResponse = (
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle className='flex items-center justify-between'>
-          Image Models
-          <DialogClose asChild>
-            <Button variant='outline' size='icon'>
-              <X />
-            </Button>
-          </DialogClose>
-        </DialogTitle>
-        <DialogDescription>
-          Image models are AI systems that generate images from text
-          descriptions. Depending on the model and prompt this can take a few
-          seconds to a few minutes.
-        </DialogDescription>
-      </DialogHeader>
-    </DialogContent>
-  );
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className='flex items-center justify-between'>
+                Image Models
+                <DialogClose asChild>
+                  <Button variant='outline' size='icon'>
+                    <X />
+                  </Button>
+                </DialogClose>
+              </DialogTitle>
+              <DialogDescription>
+                Image models are AI systems that generate images from text
+                descriptions. Depending on the model and prompt this can take a
+                few seconds to a few minutes.
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
 
   return (
     <div className='flex items-center gap-2 px-2 text-sm text-muted-foreground'>
@@ -422,7 +415,23 @@ function ThinkingMessage({
           </Button>
         </DialogTrigger>
 
-        {models[model].type === 'image' ? imageResponse : reasoningResponse}
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className='flex items-center justify-between'>
+              Reasoning Models
+              <DialogClose asChild>
+                <Button variant='outline' size='icon'>
+                  <X />
+                </Button>
+              </DialogClose>
+            </DialogTitle>
+            <DialogDescription>
+              Reasoning models are AI systems that think through problems before
+              responding. Depending on the model and prompt this can take a few
+              seconds to a few minutes.
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
       </Dialog>
     </div>
   );
