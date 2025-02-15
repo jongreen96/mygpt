@@ -6,7 +6,7 @@ import { deleteMessageAction } from '@/lib/actions';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { defaultChatModel, ModelListType, models } from '@/lib/ai-models';
-import { Message, useChat } from 'ai/react';
+import { Message, useChat } from '@ai-sdk/react';
 import {
   AlertCircle,
   CircleHelpIcon,
@@ -56,15 +56,12 @@ export default function Chat({
     setInput,
     handleInputChange,
     handleSubmit,
-    isLoading,
+    status,
     reload,
     error,
   } = useChat({
     initialMessages: prevMessages,
-    body: {
-      conversationId,
-      model: selectedModel,
-    },
+    body: { conversationId, model: selectedModel },
     onFinish(e) {
       // @ts-expect-error - conversationId is not on Message type
       const newConversationId = e.annotations[0].conversationId;
@@ -75,7 +72,7 @@ export default function Chat({
     },
   });
 
-  const [customIsLoading, setCustomIsLoading] = useState(isLoading);
+  const [customStatus, setCustomStatus] = useState(status);
 
   // Scroll to bottom on initial page load
   useEffect(() => {
@@ -86,6 +83,10 @@ export default function Chat({
     if (error?.message.includes('Insufficient credits'))
       router.push('/chat/pricing');
   }, [error, router]);
+
+  useEffect(() => {
+    setCustomStatus(status);
+  }, [status]);
 
   const handleDelete = (id: string) => {
     setMessages(messages.filter((message) => message.id !== id));
@@ -112,22 +113,16 @@ export default function Chat({
       case 'chat':
       case 'multimodal':
         {
-          handleSubmit(e, {
-            experimental_attachments: files,
-          });
+          handleSubmit(e, { experimental_attachments: files });
         }
         break;
       case 'image':
         setMessages([
           ...messages,
-          {
-            id: 'loading',
-            content: input,
-            role: 'user',
-          },
+          { id: 'loading', content: input, role: 'user' },
         ]);
         setInput('');
-        setCustomIsLoading(true);
+        setCustomStatus('submitted');
 
         const imageResponse = await fetch('/api/image', {
           method: 'POST',
@@ -159,14 +154,10 @@ export default function Chat({
 
         setMessages([
           ...messages,
-          {
-            id: 'loading',
-            content: input,
-            role: 'user',
-          },
+          { id: 'loading', content: input, role: 'user' },
           imageResponseJSON.message,
         ]);
-        setCustomIsLoading(false);
+        setCustomStatus('ready');
 
         break;
     }
@@ -194,6 +185,7 @@ export default function Chat({
       <div ref={bottomRef} />
 
       <ErrorMessage error={error} handleReload={handleReload} />
+      <ThinkingMessage customStatus={customStatus} model={selectedModel} />
 
       <ChatInput
         fileInputRef={fileInputRef}
@@ -201,8 +193,7 @@ export default function Chat({
         setFiles={setFiles}
         input={input}
         handleInputChange={handleInputChange}
-        isLoading={isLoading}
-        customIsLoading={customIsLoading}
+        customStatus={customStatus}
         customHandleSubmit={customHandleSubmit}
         selectedModel={selectedModel}
         setSelectedModel={setSelectedModel}
@@ -218,8 +209,7 @@ function ChatInput({
   setFiles,
   input,
   handleInputChange,
-  isLoading,
-  customIsLoading,
+  customStatus,
   customHandleSubmit,
   selectedModel,
   setSelectedModel,
@@ -230,8 +220,7 @@ function ChatInput({
   setFiles: React.Dispatch<React.SetStateAction<FileList | undefined>>;
   input: string;
   handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  isLoading: boolean;
-  customIsLoading: boolean;
+  customStatus: 'submitted' | 'streaming' | 'ready' | 'error';
   customHandleSubmit: (e: React.FormEvent) => void;
   selectedModel: ModelListType;
   setSelectedModel: React.Dispatch<React.SetStateAction<ModelListType>>;
@@ -239,11 +228,6 @@ function ChatInput({
 }) {
   return (
     <form className='fixed bottom-0 flex w-[calc(100%-16px)] max-w-[752px] flex-col items-center gap-2 rounded-t-lg bg-sidebar/80 p-2 backdrop-blur-sm'>
-      <ThinkingMessage
-        isLoading={customIsLoading || isLoading}
-        model={selectedModel}
-      />
-
       <input
         type='file'
         accept='image/*'
@@ -274,7 +258,7 @@ function ChatInput({
         />
 
         <SubmitButton
-          isLoading={isLoading || customIsLoading}
+          isLoading={customStatus !== 'ready'}
           customHandleSubmit={customHandleSubmit}
         />
       </div>
@@ -379,13 +363,13 @@ function ErrorMessage({
 }
 
 function ThinkingMessage({
-  isLoading,
+  customStatus,
   model,
 }: {
-  isLoading: boolean;
+  customStatus: 'submitted' | 'streaming' | 'ready' | 'error';
   model: ModelListType;
 }) {
-  if (!isLoading) return null;
+  if (customStatus !== 'submitted') return null;
 
   const reasoningResponse = (
     <DialogContent>
@@ -428,7 +412,7 @@ function ThinkingMessage({
   );
 
   return (
-    <div className='absolute -top-8 right-0 flex items-center gap-2 rounded-t-lg bg-sidebar/80 px-2 text-sm text-muted-foreground backdrop-blur-sm'>
+    <div className='flex items-center gap-2 px-2 text-sm text-muted-foreground'>
       <Loader2 className='size-4 shrink-0 animate-spin' aria-hidden='true' />
       <p>Thinking...</p>
       <Dialog>
