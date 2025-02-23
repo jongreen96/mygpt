@@ -54,7 +54,7 @@ export default async function Home() {
           </Button>
         </div>
 
-        <div className='py-40'>
+        <div className='py-20'>
           <QuestionBanner />
         </div>
       </section>

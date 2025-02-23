@@ -1,6 +1,7 @@
 'use client';
 
 import { seededShuffle } from '@/lib/utils';
+import AutoScroll from 'embla-carousel-auto-scroll';
 import { useMemo } from 'react';
 import { Badge } from './ui/badge';
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel';
@@ -218,16 +219,35 @@ export const QuestionBanner = () => {
   return (
     <section className='gap-.5 flex w-full flex-col items-center'>
       {shuffledArrays.map((shuffledQuestions, rowIndex) => (
-        <CarouselRow key={rowIndex} questions={shuffledQuestions} />
+        <CarouselRow
+          key={rowIndex}
+          questions={shuffledQuestions}
+          direction={rowIndex % 2 === 0}
+        />
       ))}
     </section>
   );
 };
 
-const CarouselRow = ({ questions }: { questions: string[] }) => {
+const CarouselRow = ({
+  questions,
+  direction,
+}: {
+  questions: string[];
+  direction: boolean;
+}) => {
   return (
     <Carousel
       className='w-full'
+      plugins={[
+        AutoScroll({
+          playOnInit: true,
+          speed: 0.2 + Math.random() * 0.4, // This clamps between 0.2 and 0.6
+          startDelay: 1,
+          stopOnInteraction: false,
+          direction: direction ? 'backward' : 'forward',
+        }),
+      ]}
       opts={{
         dragFree: true,
         loop: true,
