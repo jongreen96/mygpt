@@ -242,7 +242,7 @@ const CarouselRow = ({
       plugins={[
         AutoScroll({
           playOnInit: true,
-          speed: 0.2 + Math.random() * 0.4, // This clamps between 0.2 and 0.6
+          speed: 0.1 + Math.random() * 0.6,
           startDelay: 1,
           stopOnInteraction: false,
           direction: direction ? 'backward' : 'forward',
