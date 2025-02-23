@@ -71,6 +71,7 @@ const questions = [
   'What is the stock market, and how does it work?',
   'What are the basics of investing?',
   'How do I create a personal budget?',
+  'Why are you reading all of these?',
   'What is cryptocurrency, and how does it work?',
   'What are some easy recipes for beginners?',
   'How do I meal prep for the week?',
@@ -217,7 +218,7 @@ export const QuestionBanner = () => {
   }, []);
 
   return (
-    <section className='gap-.5 flex w-full flex-col items-center'>
+    <section className='flex w-full flex-col items-center gap-1'>
       {shuffledArrays.map((shuffledQuestions, rowIndex) => (
         <CarouselRow
           key={rowIndex}
@@ -261,7 +262,7 @@ const CarouselRow = ({
           >
             <Badge
               variant='secondary'
-              className='select-none rounded-sm border border-muted bg-background px-2'
+              className='select-none rounded-sm border border-muted px-2'
             >
               {question}
             </Badge>

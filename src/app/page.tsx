@@ -21,7 +21,7 @@ export default async function Home() {
   if (session?.user) redirect('/chat');
 
   return (
-    <main className='hero-bg space-y-12'>
+    <main className='space-y-12'>
       <header className='sticky top-0 z-20 bg-background p-2'>
         <div className='mx-auto flex max-w-7xl items-center justify-between gap-2'>
           <H2 className='pb-0'>My-GPT</H2>
