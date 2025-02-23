@@ -80,7 +80,7 @@ const questions = [
   'What are some tips for new parents?',
   'How can I help my child with homework?',
   'What are the benefits of reading to children?',
-  'How do I handle a toddler&#39;s tantrums?',
+  "How do I handle a toddler's tantrums?",
   'What are some fun activities for kids?',
   'What are the effects of plastic pollution?',
   'How can I reduce my carbon footprint?',
