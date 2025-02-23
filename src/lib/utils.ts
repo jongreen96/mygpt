@@ -44,3 +44,31 @@ export function formatCreditsLong(credits: number) {
     maximumFractionDigits: 6,
   }).format(credits / 100000);
 }
+
+export function shuffleArray<T>(array: T[]): T[] {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+export function seededShuffle(arr: string[], seed: number) {
+  const shuffled = [...arr];
+  let currentIndex = shuffled.length;
+  let randomIndex: number;
+
+  while (currentIndex !== 0) {
+    randomIndex = (seed * 9301 + 49297) % 233280;
+    seed = (seed * 9301 + 49297) % 233280;
+    randomIndex = Math.floor((randomIndex / 233280) * currentIndex);
+    currentIndex--;
+
+    [shuffled[currentIndex], shuffled[randomIndex]] = [
+      shuffled[randomIndex],
+      shuffled[currentIndex],
+    ];
+  }
+
+  return shuffled;
+}

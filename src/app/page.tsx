@@ -1,4 +1,6 @@
+import { QuestionBanner } from '@/components/question-banner';
 import { H1, H2, P } from '@/components/typography';
+import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Card,
@@ -13,17 +15,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import deviceImage from '../../public/device-showcase-light.png';
-import heroImageLight from '../../public/mygpt-hero-image-light.png';
-import heroImageDark from '../../public/mygpt-hero-image.png';
 
 export default async function Home() {
   const session = await auth();
   if (session?.user) redirect('/chat');
 
   return (
-    <main className='space-y-12'>
+    <main className='hero-bg space-y-12'>
       <header className='sticky top-0 z-20 bg-background p-2'>
-        <div className='mx-auto flex max-w-7xl items-center justify-between'>
+        <div className='mx-auto flex max-w-7xl items-center justify-between gap-2'>
           <H2 className='pb-0'>My-GPT</H2>
           <Link href='/login' className={buttonVariants()}>
             Get Started
@@ -31,41 +31,31 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className='mx-auto grid min-h-[60svh] max-w-7xl gap-10 px-2 sm:grid-cols-2 sm:gap-2'>
-        <div className='flex items-center justify-center'>
-          <div className='text-center sm:text-left'>
-            <H1 className='font-bold'>
-              Top AI Models, <br />{' '}
-              <span className='dark:bg-gradient-to-t dark:from-background dark:via-primary/75 dark:to-primary dark:bg-clip-text dark:text-transparent'>
-                No Monthly Subscription
-              </span>
-            </H1>
-            <P className='mx-auto max-w-[75%] text-muted-foreground sm:mx-0 sm:max-w-md'>
-              Access the top AI models without having to pay a monthly fee,
-              simply pay for what you use.
-            </P>
+      <section className='pt-16'>
+        <div className='space-y-6 px-2 text-center'>
+          <Badge variant='outline' className='select-none'>
+            Free Credits for new users!
+          </Badge>
 
-            <div className='mt-10'>
-              <Button asChild>
-                <Link href='/login'>Get Started</Link>
-              </Button>
-            </div>
-          </div>
+          <H1 className='font-bold'>
+            Top AI Models, <br />
+            <span className='dark:bg-gradient-to-t dark:from-background dark:via-primary/75 dark:to-primary dark:bg-clip-text dark:text-transparent'>
+              No Monthly Subscription
+            </span>
+          </H1>
+
+          <P className='mx-auto max-w-96 text-muted-foreground'>
+            Access the top AI models without having to pay a monthly fee, simply
+            pay for what you use.
+          </P>
+
+          <Button asChild className='w-full max-w-64'>
+            <Link href='/login'>Get Started</Link>
+          </Button>
         </div>
 
-        <div className='hidden items-center sm:flex'>
-          <Image
-            src={heroImageLight}
-            alt='Hero Image'
-            className='hidden rounded dark:block'
-            priority
-          />
-          <Image
-            src={heroImageDark}
-            alt='Hero Image'
-            className='rounded dark:hidden'
-            priority
-          />
+        <div className='py-40'>
+          <QuestionBanner />
         </div>
       </section>
 

@@ -112,3 +112,23 @@ body {
   resize: none;
   max-height: 50svh;
 }
+
+.hero-bg {
+  background-image: radial-gradient(
+    circle at 50% 25%,
+    hsl(210, 100%, 15%) 0%,
+    hsl(var(--background)) 25%,
+    hsl(210, 100%, 15%) 50%,
+    hsl(var(--background)) 75%,
+    hsl(210, 100%, 15%) 100%
+  );
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
