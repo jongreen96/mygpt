@@ -10,7 +10,12 @@ import {
 import { auth } from '@/lib/auth';
 import { getAdminStats } from '@/lib/db';
 import { cn, formatCredits } from '@/lib/utils';
-import { formatDistanceToNow, isToday } from 'date-fns';
+import {
+  formatDistance,
+  formatDistanceToNow,
+  isThisWeek,
+  isToday,
+} from 'date-fns';
 import { redirect } from 'next/navigation';
 
 export default async function AdminDashboard() {
@@ -124,7 +129,7 @@ export default async function AdminDashboard() {
           <TableHeader>
             <TableRow>
               <TableHead>name</TableHead>
-              <TableHead>email</TableHead>
+              <TableHead className='hidden sm:block'>email</TableHead>
               <TableHead>credits</TableHead>
               <TableHead>created at</TableHead>
             </TableRow>
@@ -135,7 +140,7 @@ export default async function AdminDashboard() {
                 <TableCell className={cn(!user.name && 'text-muted')}>
                   {user.name || 'unknown'}
                 </TableCell>
-                <TableCell>{user.email}</TableCell>
+                <TableCell className='hidden sm:block'>{user.email}</TableCell>
                 <TableCell
                   className={cn(user.credits < 0 && 'text-destructive')}
                 >
@@ -143,16 +148,10 @@ export default async function AdminDashboard() {
                 </TableCell>
                 <TableCell>
                   {isToday(user.createdAt)
-                    ? `${formatDistanceToNow(user.createdAt, { addSuffix: true })}`
-                    : user.createdAt.toLocaleString('en-GB', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        hour12: true,
-                      })}
+                    ? formatDistanceToNow(user.createdAt, { addSuffix: true })
+                    : isThisWeek(user.createdAt)
+                      ? `${formatDistance(user.createdAt, new Date())} ago`
+                      : new Date(user.createdAt).toLocaleDateString()}
                 </TableCell>
               </TableRow>
             ))}
