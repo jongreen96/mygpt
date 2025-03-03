@@ -28,6 +28,8 @@ export default async function AdminDashboard({
   const session = await auth();
   if (session?.user?.email !== 'jongreen1996@gmail.com') redirect('/chat');
 
+  // TODO: Fix params for next 15 by awaiting
+
   const stats = await getAdminStats();
   const usersPerPage = 100;
   const currentPage = Number(searchParams.page) || 1;
