@@ -20,15 +20,12 @@ import {
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-export default async function AdminDashboard({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
+export default async function AdminDashboard(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const session = await auth();
   if (session?.user?.email !== 'jongreen1996@gmail.com') redirect('/chat');
-
-  // TODO: Fix params for next 15 by awaiting
+  const searchParams = await props.searchParams;
 
   const stats = await getAdminStats();
   const usersPerPage = 100;
