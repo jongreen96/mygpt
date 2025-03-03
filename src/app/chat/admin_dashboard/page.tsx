@@ -1,3 +1,4 @@
+import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
@@ -16,17 +17,29 @@ import {
   isThisWeek,
   isToday,
 } from 'date-fns';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-export default async function AdminDashboard() {
+export default async function AdminDashboard({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const session = await auth();
   if (session?.user?.email !== 'jongreen1996@gmail.com') redirect('/chat');
 
   const stats = await getAdminStats();
+  const usersPerPage = 100;
+  const currentPage = Number(searchParams.page) || 1;
+  const totalPages = Math.ceil(stats.users.length / usersPerPage);
+  const currentUsers = stats.users.slice(
+    (currentPage - 1) * usersPerPage,
+    currentPage * usersPerPage,
+  );
 
   return (
     <main className='mt-10 space-y-16 p-2'>
-      <section className='grid grid-cols-2 gap-2 sm:grid-cols-4'>
+      <section className='mx-auto grid max-w-5xl grid-cols-2 gap-2 sm:grid-cols-4'>
         <Card>
           <CardHeader>
             <CardTitle>Total Users:</CardTitle>
@@ -135,7 +148,7 @@ export default async function AdminDashboard() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {stats.users.map((user) => (
+            {currentUsers.map((user) => (
               <TableRow key={user.id}>
                 <TableCell className={cn(!user.name && 'text-muted')}>
                   {user.name || 'unknown'}
@@ -157,6 +170,27 @@ export default async function AdminDashboard() {
             ))}
           </TableBody>
         </Table>
+        <div className='mt-4 flex items-center justify-center gap-4'>
+          {currentPage > 1 && (
+            <Link
+              href={`?page=${currentPage - 1}`}
+              className={buttonVariants()}
+            >
+              Previous
+            </Link>
+          )}
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          {currentPage < totalPages && (
+            <Link
+              href={`?page=${currentPage + 1}`}
+              className={buttonVariants()}
+            >
+              Next
+            </Link>
+          )}
+        </div>
       </section>
     </main>
   );
