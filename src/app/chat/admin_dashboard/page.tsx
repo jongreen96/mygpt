@@ -163,7 +163,7 @@ export default async function AdminDashboard(props: {
                     ? formatDistanceToNow(user.createdAt, { addSuffix: true })
                     : isThisWeek(user.createdAt)
                       ? `${formatDistance(user.createdAt, new Date())} ago`
-                      : new Date(user.createdAt).toLocaleDateString()}
+                      : new Date(user.createdAt).toLocaleDateString('en-GB')}
                 </TableCell>
               </TableRow>
             ))}
